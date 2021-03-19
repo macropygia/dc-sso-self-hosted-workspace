@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+
+  # Keycloak
+  # Image:
+  # https://quay.io/repository/keycloak/keycloak
+  # Docs:
+  # https://www.keycloak.org/getting-started/getting-started-docker
+  # https://github.com/keycloak/keycloak-containers/tree/master/docker-compose-examples
+  # https://github.com/keycloak/keycloak-containers/blob/master/server/README.md
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak
+    hostname: kc-server
+    environment:
+      - DB_VENDOR=POSTGRES
+      - DB_ADDR=pg-server
+      - DB_DATABASE=keycloak
+      - DB_USER=root
+      - DB_SCHEMA=public
+      - DB_PASSWORD=root
+      - KEYCLOAK_USER=webmaster
+      - KEYCLOAK_PASSWORD=Pa55w@rd
+      - PROXY_ADDRESS_FORWARDING=true
+      #- KEYCLOAK_LOGLEVEL=DEBUG
+      #- ROOT_LOGLEVEL=DEBUG
+      #- JDBC_PARAMS=ssl=true
+
+      # for nginx-proxy
+      - VIRTUAL_HOST=auth.<DOMAIN>
+      - VIRTUAL_PORT=8080
+      #SSL#- SSL_POLICY=Mozilla-Modern
+      #NO_HSTS#- HSTS=off
+      #SELF_SIGN#- SSL_POLICY=self-sign
+
+      - TZ=<TZ>
+    expose:
+      - '8080'
+    volumes:
+      # Custom theme
+      #- /path/to/theme_name:/opt/jboss/keycloak/themes/theme_name:ro
+      # tzdata
+      - /usr/share/zoneinfo/<TZ>:/usr/share/zoneinfo/<TZ>:ro
+    restart: always
+    networks:
+      - container-link
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  default:
+    external:
+      name: bridge
+  container-link:
+    name: docker.internal

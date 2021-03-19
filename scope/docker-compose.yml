@@ -1,0 +1,29 @@
+version: '2.4'
+
+services:
+
+  # Scope
+  # https://github.com/weaveworks/scope
+  # https://www.weave.works/docs/scope/latest/installing/#docker-compose
+  scope:
+    image: weaveworks/scope:latest_release
+    container_name: scope
+    hostname: scope-server
+    environment:
+      - TZ=<TZ>
+    network_mode: "host"
+    command: >-
+      --probe.docker=true
+    pid: "host"
+    privileged: true
+    labels:
+      - "works.weave.role=system"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      # tzdata
+      - /usr/share/zoneinfo/<TZ>:/usr/share/zoneinfo/<TZ>:ro
+    restart: unless-stopped
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"

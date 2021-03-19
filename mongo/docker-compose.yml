@@ -1,0 +1,81 @@
+version: '3.8'
+
+x-op-common: &common
+  networks:
+    - container-link
+  logging:
+    options:
+      max-size: "10m"
+      max-file: "3"
+
+x-op-image: &image
+  image: mongo:4-bionic
+
+services:
+
+  # MongoDB
+  # https://hub.docker.com/_/mongo
+  mongo:
+    <<: *image
+    container_name: mongo
+    hostname: mongo-server
+    environment:
+      - TZ=<TZ>
+    command: >
+      mongod
+      --oplogSize 128
+      --replSet rs0
+    expose:
+      - '27017'
+    volumes:
+      - mongo-data:/data/db
+      - mongo-config:/data/configdb
+      # tzdata
+      - /usr/share/zoneinfo/<TZ>:/usr/share/zoneinfo/<TZ>:ro
+    restart: always
+    <<: *common
+
+  # Init replica set for rocket.chat
+  # https://github.com/RocketChat/Rocket.Chat/blob/develop/docker-compose.yml
+  # https://docs.rocket.chat/installation/manual-installation/mongo-replicas
+  mongo_init_replica:
+    <<: *image
+    container_name: mongo_init_replica
+    environment:
+      - TZ=<TZ>
+    command: >
+      bash -c
+        "for i in `seq 1 30`; do
+          mongo mongo/rocketchat --eval \"
+            rs.initiate({
+              _id: 'rs0',
+              members: [ { _id: 0, host: 'localhost:27017' } ]})\" &&
+          s=$$? && break || s=$$?;
+          echo \"Tried $$i times. Waiting 5 secs...\";
+          sleep 5;
+        done; (exit $$s)"
+    depends_on:
+      - mongo
+    volumes:
+      - mongo-repl-data:/data/db
+      - mongo-repl-config:/data/configdb
+      # tzdata
+      - /usr/share/zoneinfo/<TZ>:/usr/share/zoneinfo/<TZ>:ro
+    <<: *common
+
+volumes:
+  mongo-data:
+    external: true
+  mongo-config:
+    external: true
+  mongo-repl-data:
+    external: true
+  mongo-repl-config:
+    external: true
+
+networks:
+  default:
+    external:
+      name: bridge
+  container-link:
+    name: docker.internal

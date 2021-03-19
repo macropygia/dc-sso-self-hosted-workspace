@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+
+  # mongo-express
+  # Image:
+  # https://hub.docker.com/_/mongo-express
+  # Docs:
+  # https://github.com/mongo-express/mongo-express
+  mongoexpress:
+    image: mongo-express:latest
+    container_name: mongoexpress
+    hostname: mongoexpress-server
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongo-server
+      #- ME_CONFIG_MONGODB_PORT=27017
+      #- ME_CONFIG_MONGODB_ADMINUSERNAME=root
+      #- ME_CONFIG_MONGODB_ADMINPASSWORD=root
+      #- ME_CONFIG_MONGODB_AUTH_DATABASE=admin
+      #- ME_CONFIG_MONGODB_AUTH_USERNAME=root
+      #- ME_CONFIG_MONGODB_AUTH_PASSWORD=root
+
+      # for nginx-proxy
+      - VIRTUAL_HOST=mongo.<DOMAIN>
+      - VIRTUAL_PORT=8081
+      - NETWORK_ACCESS=internal
+
+      - TZ=<TZ>
+    expose:
+      - '8081'
+    volumes:
+      # tzdata
+      - /usr/share/zoneinfo/<TZ>:/usr/share/zoneinfo/<TZ>:ro
+    restart: unless-stopped
+    networks:
+      - container-link
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  default:
+    external:
+      name: bridge
+  container-link:
+    name: docker.internal

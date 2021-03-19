@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+
+  # MariaDB
+  # Image: https://hub.docker.com/_/mariadb
+  mariadb:
+    image: mariadb:10
+    container_name: mariadb
+    hostname: maria-server
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - TZ=<TZ>
+    command: >
+      mysqld
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_bin
+      --performance-schema=false
+      --expire_logs_days=1
+    expose:
+      - '3306'
+    volumes:
+      - maria-data:/var/lib/mysql
+      - ./mount/init:/docker-entrypoint-initdb.d
+      #- ./mount/conf:/etc/mysql/conf.d
+      #- maria-log:/var/log/mysql
+      # tzdata
+      - /usr/share/zoneinfo/<TZ>:/usr/share/zoneinfo/<TZ>:ro
+    restart: always
+    networks:
+      - container-link
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  maria-data:
+    external: true
+
+networks:
+  default:
+    external:
+      name: bridge
+  container-link:
+    name: docker.internal

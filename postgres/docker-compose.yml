@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+
+  # PostgreSQL
+  # https://hub.docker.com/_/postgres
+  postgres:
+    image: postgres:13-alpine
+    container_name: postgres
+    hostname: pg-server
+    environment:
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_USER=root
+      - POSTGRES_DB=postgres
+      - POSTGRES_INITDB_ARGS=--encoding=UTF-8 --locale=C
+      #- POSTGRES_INITDB_WALDIR=
+      #- POSTGRES_HOST_AUTH_METHOD=
+      - DB_EXTENSION=pg_trgm,btree_gist
+      #- LANG=<LOCALE>.UTF-8
+
+      - TZ=<TZ>
+    expose:
+      - '5432'
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./mount/init:/docker-entrypoint-initdb.d
+      #- ./mount/postgresql.conf:/etc/postgresql/postgresql.conf
+      # tzdata
+      - /usr/share/zoneinfo/<TZ>:/usr/share/zoneinfo/<TZ>:ro
+    restart: always
+    networks:
+      - container-link
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  postgres-data:
+    external: true
+
+networks:
+  default:
+    external:
+      name: bridge
+  container-link:
+    name: docker.internal

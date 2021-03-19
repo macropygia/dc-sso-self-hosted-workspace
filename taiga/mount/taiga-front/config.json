@@ -1,0 +1,33 @@
+{
+    "api": "<PROTOCOL>://taiga.<DOMAIN>/api/v1/",
+    "eventsUrl": "wss://taiga.<DOMAIN>/events",
+    "eventsMaxMissedHeartbeats": 5,
+    "eventsHeartbeatIntervalTime": 60000,
+    "eventsReconnectTryInterval": 10000,
+    "debug": false,
+    "debugInfo": false,
+    "defaultLanguage": "<LANG>",
+    "themes": ["taiga"],
+    "defaultTheme": "taiga",
+    "defaultLoginEnabled": true,
+    "publicRegisterEnabled": false,
+    "feedbackEnabled": true,
+    "supportUrl": "https://resources.taiga.io",
+    "privacyPolicyUrl": null,
+    "termsOfServiceUrl": null,
+    "maxUploadFileSize": null,
+    "contribPlugins": [
+      "/plugins/gitlab-auth/gitlab-auth.json"
+    ],
+    "gitHubClientId": "",
+    "gitLabClientId": "app-taiga",
+    "gitLabUrl": "<PROTOCOL>://auth.<DOMAIN>",
+    "tagManager": { "accountId": null },
+    "tribeHost": null,
+    "enableAsanaImporter": false,
+    "enableGithubImporter": false,
+    "enableJiraImporter": false,
+    "enableTrelloImporter": false,
+    "gravatar": false,
+    "rtlLanguages": ["fa"]
+}

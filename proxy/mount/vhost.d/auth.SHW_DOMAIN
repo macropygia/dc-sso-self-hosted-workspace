@@ -1,0 +1,13 @@
+# Redirect GitLab Endpoint to Keycloak OIDC Endpoint
+location ^~ /oauth/authorize {
+  return 301 <PROTOCOL>://auth.<DOMAIN>/auth/realms/<REALM>/protocol/openid-connect/auth$is_args$args;
+}
+location ^~ /oauth/token {
+  return 307 <PROTOCOL>://auth.<DOMAIN>/auth/realms/<REALM>/protocol/openid-connect/token$is_args$args;
+}
+location ^~ /api/v4/user {
+  return 301 <PROTOCOL>://auth.<DOMAIN>/auth/realms/<REALM>/protocol/openid-connect/userinfo$is_args$args;
+}
+location ^~ /api/v3/user {
+  return 301 <PROTOCOL>://auth.<DOMAIN>/auth/realms/<REALM>/protocol/openid-connect/userinfo$is_args$args;
+}

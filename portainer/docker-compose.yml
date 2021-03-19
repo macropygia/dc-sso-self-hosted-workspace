@@ -1,0 +1,37 @@
+version: '3.7'
+
+services:
+
+  # Portainer
+  # https://hub.docker.com/r/portainer/portainer-ce
+  portainer:
+    image: portainer/portainer-ce:alpine
+    container_name: portainer
+    hostname: portainer
+    environment:
+      - TZ=<TZ>
+    ports:
+      - '9000:9000'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:rw
+      - portainer-data:/data
+      # tzdata
+      - /usr/share/zoneinfo/<TZ>:/usr/share/zoneinfo/<TZ>:ro
+    restart: unless-stopped
+    networks:
+      - container-link
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  portainer-data:
+    external: true
+
+networks:
+  default:
+    external:
+      name: bridge
+  container-link:
+    name: docker.internal

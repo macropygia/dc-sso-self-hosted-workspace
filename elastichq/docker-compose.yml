@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+
+  # ElasticHQ
+  # Image:
+  # https://hub.docker.com/r/elastichq/elasticsearch-hq
+  # Docs:
+  # https://docs.elastichq.org/installation.html
+  # https://github.com/ElasticHQ/elasticsearch-HQ/blob/master/example/docker-compose.yml
+  elastichq:
+    image: elastichq/elasticsearch-hq
+    container_name: elastichq
+    hostname: eshq-server
+    environment:
+      - HQ_DEFAULT_URL=http://es-server:9200
+      - HQ_ENABLE_SSL=false
+      #- HQ_CA_CERTS=/path/to/your/ca.crt
+      #- HQ_VERIFY_CERTS=trie
+      #- HQ_DEBUG=false
+
+      # for nginx-proxy
+      - VIRTUAL_HOST=eshq.<DOMAIN>
+      - VIRTUAL_PORT=5000
+      - NETWORK_ACCESS=internal
+
+      - TZ=<TZ>
+    expose:
+      - '5000'
+    volumes:
+      # tzdata
+      - /usr/share/zoneinfo/<TZ>:/usr/share/zoneinfo/<TZ>:ro
+    restart: unless-stopped
+    networks:
+      - container-link
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    #extra_hosts:
+    #  - www.elastichq.org:192.0.2.0
+
+networks:
+  default:
+    external:
+      name: bridge
+  container-link:
+    name: docker.internal

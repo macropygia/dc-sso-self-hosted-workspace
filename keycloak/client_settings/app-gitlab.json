@@ -1,0 +1,143 @@
+{
+    "clientId": "app-gitlab",
+    "rootUrl": "<PROTOCOL>://gitlab.<DOMAIN>",
+    "adminUrl": "<PROTOCOL>://gitlab.<DOMAIN>/users/auth/saml/callback",
+    "surrogateAuthRequired": false,
+    "enabled": true,
+    "alwaysDisplayInConsole": false,
+    "clientAuthenticatorType": "client-secret",
+    "redirectUris": [
+        "<PROTOCOL>://gitlab.<DOMAIN>/users/auth/saml/callback"
+    ],
+    "webOrigins": [],
+    "notBefore": 0,
+    "bearerOnly": false,
+    "consentRequired": false,
+    "standardFlowEnabled": true,
+    "implicitFlowEnabled": false,
+    "directAccessGrantsEnabled": false,
+    "serviceAccountsEnabled": false,
+    "publicClient": false,
+    "frontchannelLogout": true,
+    "protocol": "saml",
+    "attributes": {
+        "saml.force.post.binding": "true",
+        "saml.multivalued.roles": "false",
+        "backchannel.logout.revoke.offline.tokens": "false",
+        "saml.server.signature.keyinfo.ext": "false",
+        "saml.signing.certificate": "MIICozCCAYsCBgF4RZuQkzANBgkqhkiG9w0BAQsFADAVMRMwEQYDVQQDDAphcHAtZ2l0bGFiMB4XDTIxMDMxODEzNTAyNloXDTMxMDMxODEzNTIwNlowFTETMBEGA1UEAwwKYXBwLWdpdGxhYjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAKrlPj9/4WOZTCL0QsNrbAvl47kCze3KoGcvplagFPpWTvJ1Dy8b4r80DjKFCRxG5Z4KxbzRAg7Aa2UsNKWIXHwLgIgoluJb55fIBVaRyqTjoXD5M/TCMuOvVz7QTn3XQQ1dyKw4EVDLvOTE/p2wU6w9H7sEmIYi+i3VVBHObmQdfaI+tKlACqnTG8l1lbn0zUW2SJdWLbmz93386pXSOgxaRYLpNcpX1nUJu4DLVJziw4tMLj66gfjeh+59yl4oKPc+SVfKXOs1f/py9zHaMShrnQ5D/t2upt0qleDkC22nQuJOOuLa3dldENUBs3e2X4pkouFSp+9y9afR+0KdHJMCAwEAATANBgkqhkiG9w0BAQsFAAOCAQEAjRSgyNCPC0LsaTsq4N2cg4SU05/z4s//liOyOu/XuAnjoUG4dsFNFoYJq7J6JZ2JE50I+IoB13PlCLF0NE4DWVFbPhSY1uWwMfbo7QutuQukPc+8EZ7CH2RC5batni2FHBu3fe341xN/2ykzarEjHyqdIWJGQjeC6W8b+fYPDYyoGpasi58i6dK5TF4HqXW4aSOLL0xa0vTX2ucMzq0kPKMu9PdVK504mgaTTX3TH+mqVBqTKbc+77HYQA/ZBm4prR3RkS30fM2VoZDxw/m8RE2ugspIfWyAbqb/yNRqTlb8yx75efIOS7+RVro3oj/mXix8dBczF5Xy0AbSrrfQ0w==",
+        "backchannel.logout.session.required": "false",
+        "saml.signature.algorithm": "RSA_SHA256",
+        "client_credentials.use_refresh_token": "false",
+        "saml.client.signature": "true",
+        "saml.signing.private.key": "MIIEowIBAAKCAQEAquU+P3/hY5lMIvRCw2tsC+XjuQLN7cqgZy+mVqAU+lZO8nUPLxvivzQOMoUJHEblngrFvNECDsBrZSw0pYhcfAuAiCiW4lvnl8gFVpHKpOOhcPkz9MIy469XPtBOfddBDV3IrDgRUMu85MT+nbBTrD0fuwSYhiL6LdVUEc5uZB19oj60qUAKqdMbyXWVufTNRbZIl1YtubP3ffzqldI6DFpFguk1ylfWdQm7gMtUnOLDi0wuPrqB+N6H7n3KXigo9z5JV8pc6zV/+nL3MdoxKGudDkP+3a6m3SqV4OQLbadC4k464trd2V0Q1QGzd7ZfimSi4VKn73L1p9H7Qp0ckwIDAQABAoIBADfWQRl0SgtF2jeNgYbiQWI90cLwZKJuUyyDyCCDm3cT3iWgE777qIF6m6zsBMcFbx7NPEBuNfLl8fETmXwAat9ozq0uPeZlyuyvwPbBGen4KhaEhfJRxVjZQHNYklzRiQK6AsgqZZX1i5lfuCWDqEMdkZGEdeVV5lI1YouS3ES/Rr5rK4gOn1zI5K7Wu4aX1eVMZeK/3bK6JOZm4andhfe5zKYodlfPDI48BSr85jRRH1TIfxIDmQSWRn89V7+e/58xNuxV/HoE8VJc6jS9wFg9YsIy/94wZ0FWkDm/9Qd8D8vA7E2CMsFFVsMzocDmqf5nLTfynP1mP/7RLcn8RgECgYEA/dHDdilb+WTjvmHvpdt1n7PLT61L91Fkfij0DQpNdpH9M5bPDeY40IlLbhtw0txQ0TKej9xfgXq83eJqQ4vuLWsIXYbatJ0/0WsIIgm/zCKIxcLzOZWVP1TQinyQI5oFL4p6HrnKIRsN5nEQvfqwY+CpMnB43oQTlFqoes7E35MCgYEArF0Z8KrhaInaxauUfodKRQx3+8ggIh/EaepJstHQWOq8FjDbKDXtTvPm6OxK9mwElzxbp49Pw3VaTsYafyuSZsjyHvdu+OU/66kPCFqE86Bmez4xASPMrn2hRIv1I1vsTZFffy5zhW6sar1WsxT7nnhg4cauI3eNXhvIz8Mq7wECgYEAk3Am31uVDqCZXnzbTXfWsqcpAaaDyy0fd91oLq7+YlLZRv9iVQuXkyM9ir8r4YCS/YIu8xgq7jaSwT0FRylgeEeFO3bbUjFJ4ecPeV46aGTjGCVvTdLjOD+XR+qle9i7DGufFnwLuwFRKLwi4ohdsBbPkfoda/xCt1mWJog3ejsCgYB9rERFndJMDndcuQXEW5BjV/wDsJ79QnxLXW/u2dw3eK863tRsNSWZ82vhWKgvlAKk4nVRbsSRlvcJiJe5MWPFXa5rta1L/JrmkJVNWfKmT8VpBqdkVV3fu+nhuMo7xcI9rEkcyhmgqFk+Wl7ko9/yY4MAG4TMh1ajz05TbdHYAQKBgEfE/8etJERl0q+QnjHr/BEaZOlUiOkYCLHUzvihPPmMBY/I++GAdAJ6qPL9esf8LdaSdqY0qifk0s4P5tMbj8Za202a4Luiz7EkvR2Dc0QZupvoazeIxWi4SiUc/pap4y7NDpdp8QnImxGss9lDLNERP/Uc1LWEobnua5nD/DWU",
+        "saml.assertion.signature": "true",
+        "saml.encrypt": "false",
+        "saml_assertion_consumer_url_post": "<PROTOCOL>://gitlab.<DOMAIN>/users/auth/saml/callback",
+        "saml.server.signature": "true",
+        "saml_idp_initiated_sso_url_name": "gitlab.<DOMAIN>",
+        "exclude.session.state.from.auth.response": "false",
+        "saml_force_name_id_format": "false",
+        "tls.client.certificate.bound.access.tokens": "false",
+        "saml.authnstatement": "true",
+        "display.on.consent.screen": "false",
+        "saml_name_id_format": "persistent",
+        "saml_signature_canonicalization_method": "http://www.w3.org/2001/10/xml-exc-c14n#",
+        "saml.onetimeuse.condition": "false"
+    },
+    "authenticationFlowBindingOverrides": {},
+    "fullScopeAllowed": true,
+    "nodeReRegistrationTimeout": -1,
+    "protocolMappers": [
+        {
+            "name": "roles",
+            "protocol": "saml",
+            "protocolMapper": "saml-role-list-mapper",
+            "consentRequired": false,
+            "config": {
+                "single": "true",
+                "attribute.nameformat": "Basic",
+                "friendly.name": "roles",
+                "attribute.name": "roles"
+            }
+        },
+        {
+            "name": "first_name",
+            "protocol": "saml",
+            "protocolMapper": "saml-user-property-mapper",
+            "consentRequired": false,
+            "config": {
+                "attribute.nameformat": "Basic",
+                "user.attribute": "firstName",
+                "friendly.name": "first_name",
+                "attribute.name": "first_name"
+            }
+        },
+        {
+            "name": "username",
+            "protocol": "saml",
+            "protocolMapper": "saml-user-property-mapper",
+            "consentRequired": false,
+            "config": {
+                "attribute.nameformat": "Basic",
+                "user.attribute": "username",
+                "friendly.name": "username",
+                "attribute.name": "username"
+            }
+        },
+        {
+            "name": "email",
+            "protocol": "saml",
+            "protocolMapper": "saml-user-property-mapper",
+            "consentRequired": false,
+            "config": {
+                "attribute.nameformat": "Basic",
+                "user.attribute": "email",
+                "friendly.name": "email",
+                "attribute.name": "email"
+            }
+        },
+        {
+            "name": "name",
+            "protocol": "saml",
+            "protocolMapper": "saml-user-attribute-mapper",
+            "consentRequired": false,
+            "config": {
+                "attribute.nameformat": "Basic",
+                "user.attribute": "displayName",
+                "friendly.name": "name",
+                "attribute.name": "name"
+            }
+        },
+        {
+            "name": "last_name",
+            "protocol": "saml",
+            "protocolMapper": "saml-user-property-mapper",
+            "consentRequired": false,
+            "config": {
+                "attribute.nameformat": "Basic",
+                "user.attribute": "lastName",
+                "friendly.name": "last_name",
+                "attribute.name": "last_name"
+            }
+        }
+    ],
+    "defaultClientScopes": [
+        "web-origins",
+        "role_list",
+        "profile",
+        "roles",
+        "email"
+    ],
+    "optionalClientScopes": [
+        "address",
+        "phone",
+        "offline_access",
+        "microprofile-jwt"
+    ],
+    "access": {
+        "view": true,
+        "configure": true,
+        "manage": true
+    }
+}

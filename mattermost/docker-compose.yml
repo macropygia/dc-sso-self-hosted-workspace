@@ -1,0 +1,137 @@
+version: '3.8'
+
+services:
+
+  # Mattermost
+  # Image:
+  # https://hub.docker.com/r/mattermost/mattermost-team-edition
+  # Docs:
+  # https://docs.mattermost.com/install/prod-docker.html
+  # https://github.com/mattermost/mattermost-server
+  # https://github.com/mattermost/mattermost-server/blob/master/build/docker-compose.yml
+  # https://github.com/mattermost/mattermost-server/blob/master/build/Dockerfile
+  # https://docs.mattermost.com/administration/config-settings.html
+  mattermost:
+    image: mattermost/mattermost-team-edition:latest
+    container_name: mattermost
+    hostname: mm-server
+    environment:
+      - MM_SERVICESETTINGS_SITEURL=<PROTOCOL>://mm.<DOMAIN>
+      - MM_TEAMSETTINGS_TEAMMATENAMEDISPLAY=nickname_full_name
+      #- MM_PRIVACYSETTINGS_SHOWEMAILADDRESS=true
+      #- MM_PRIVACYSETTINGS_SHOWFULLNAME=true
+
+      # Database
+      - MM_SQLSETTINGS_DRIVERNAME=postgres
+      - MM_SQLSETTINGS_DATASOURCE=postgres://root:root@pg-server/mattermost?sslmode=disable
+
+      # Locale
+      - MM_LOCALIZATIONSETTINGS_DEFAULTSERVERLOCALE=<LANG>
+      - MM_LOCALIZATIONSETTINGS_DEFAULTCLIENTLOCALE=<LANG>
+      #- MM_LOCALIZATIONSETTINGS_AVAILABLELOCALES=
+
+      # Password
+      - MM_PASSWORDSETTINGS_MINIMUMLENGTH=8
+      #- MM_PASSWORDSETTINGS_LOWERCASE=true
+      #- MM_PASSWORDSETTINGS_NUMBER=true
+      #- MM_PASSWORDSETTINGS_UPPERCASE=true
+      #- MM_PASSWORDSETTINGS_SYMBOL=true
+
+      # Login
+      #- MM_EMAILSETTINGS_ENABLESIGNUPWITHEMAIL=false
+      #- MM_EMAILSETTINGS_ENABLESIGNINWITHEMAIL=true
+      #- MM_EMAILSETTINGS_ENABLESIGNINWITHUSERNAME=true
+
+      # EMail
+      - MM_EMAILSETTINGS_SENDEMAILNOTIFICATIONS=true
+      - MM_EMAILSETTINGS_FEEDBACKEMAIL=no-reply@mm.<DOMAIN>
+      - MM_EMAILSETTINGS_REPLYTOADDRESS=no-reply@mm.<DOMAIN>
+      - MM_EMAILSETTINGS_ENABLESMTPAUTH=false
+      #- MM_EMAILSETTINGS_SMTPUSERNAME=
+      #- MM_EMAILSETTINGS_SMTPPASSWORD=
+      - MM_EMAILSETTINGS_SMTPSERVER=<SMTP_SERVER>
+      - MM_EMAILSETTINGS_SMTPPORT=<SMTP_PORT>
+      - MM_EMAILSETTINGS_CONNECTIONSECURITY=STARTTLS
+      - MM_EMAILSETTINGS_SENDPUSHNOTIFICATIONS=false
+
+      # GitLab
+      - MM_GITLABSETTINGS_ENABLE=true
+      - MM_GITLABSETTINGS_SECRET=<KEYCLOAK_CLIENT_SECRET>
+      - MM_GITLABSETTINGS_ID=app-mattermost
+      #- MM_GITLABSETTINGS_SCOPE=
+      - MM_GITLABSETTINGS_AUTHENDPOINT=<PROTOCOL>://auth.<DOMAIN>/auth/realms/<REALM>/protocol/openid-connect/auth
+      - MM_GITLABSETTINGS_TOKENENDPOINT=<PROTOCOL>://auth.<DOMAIN>/auth/realms/<REALM>/protocol/openid-connect/token
+      - MM_GITLABSETTINGS_USERAPIENDPOINT=<PROTOCOL>://auth.<DOMAIN>/auth/realms/<REALM>/protocol/openid-connect/userinfo
+      #- MM_GITLABSETTINGS_DISCOVERYENDPOINT=
+      #- MM_GITLABSETTINGS_BUTTONTEXT=
+      #- MM_GITLABSETTINGS_BUTTONCOLOR=
+
+      # Bleve
+      - MM_BLEVESETTINGS_INDEXDIR=./bleveindexes
+      - MM_BLEVESETTINGS_ENABLEINDEXING=true,
+      - MM_BLEVESETTINGS_ENABLESEARCHING=true,
+      - MM_BLEVESETTINGS_ENABLEAUTOCOMPLETE=true,
+      - MM_BLEVESETTINGS_BULKINDEXINGTIMEWINDOWSECONDS=3600
+
+      # Telemetry
+      - MM_LOGSETTINGS_ENABLEDIAGNOSTICS=false
+
+      # for nginx-proxy
+      - VIRTUAL_HOST=mm.<DOMAIN>
+      - VIRTUAL_PORT=8065
+      #SSL#- SSL_POLICY=Mozilla-Modern
+      #NO_HSTS#- HSTS=off
+      #SELF_SIGN#- SSL_POLICY=self-sign
+
+      - TZ=<TZ>
+    expose:
+      - '8065'
+      # listen on to expose performance metrics
+      #- '8067'
+      # Gossip Port
+      #- '8074'
+      # Streaming Port
+      #- '8075'
+    volumes:
+      - mattermost-data:/mattermost/data
+      - mattermost-logs:/mattermost/logs
+      - mattermost-config:/mattermost/config
+      - mattermost-plugins:/mattermost/plugins
+      - mattermost-client-plugins:/mattermost/client/plugins
+      - mattermost-indexes:/mattermost/bleveindexes
+      # CA bundle
+      #SELF_SIGN#- ../setup/self-sign-cert/ca-certificates.crt:/etc/ssl/certs/ca-certificates.crt:ro
+      # tzdata
+      - /usr/share/zoneinfo/<TZ>:/usr/share/zoneinfo/<TZ>:ro
+    restart: unless-stopped
+    networks:
+      - container-link
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    extra_hosts:
+      - auth.<DOMAIN>:<LOCAL_IP>
+      - api.segment.io:192.0.2.0
+      - notices.mattermost.com:192.0.2.0
+
+volumes:
+  mattermost-data:
+    external: true
+  mattermost-logs:
+    external: true
+  mattermost-config:
+    external: true
+  mattermost-plugins:
+    external: true
+  mattermost-client-plugins:
+    external: true
+  mattermost-indexes:
+    external: true
+
+networks:
+  default:
+    external:
+      name: bridge
+  container-link:
+    name: docker.internal

@@ -1,0 +1,132 @@
+{
+    "clientId": "app-growi",
+    "rootUrl": "<PROTOCOL>://growi.<DOMAIN>",
+    "adminUrl": "<PROTOCOL>://growi.<DOMAIN>/passport/saml/callback",
+    "surrogateAuthRequired": false,
+    "enabled": true,
+    "alwaysDisplayInConsole": false,
+    "clientAuthenticatorType": "client-secret",
+    "redirectUris": [
+        "<PROTOCOL>://growi.<DOMAIN>/*"
+    ],
+    "webOrigins": [],
+    "notBefore": 0,
+    "bearerOnly": false,
+    "consentRequired": false,
+    "standardFlowEnabled": true,
+    "implicitFlowEnabled": false,
+    "directAccessGrantsEnabled": false,
+    "serviceAccountsEnabled": false,
+    "publicClient": false,
+    "frontchannelLogout": true,
+    "protocol": "saml",
+    "attributes": {
+        "saml_assertion_consumer_url_redirect": "<PROTOCOL>://growi.<DOMAIN>/passport/saml/callback",
+        "saml.force.post.binding": "true",
+        "saml.multivalued.roles": "false",
+        "backchannel.logout.revoke.offline.tokens": "false",
+        "saml.server.signature.keyinfo.ext": "false",
+        "saml.signing.certificate": "MIICoTCCAYkCBgF4RZ+eIzANBgkqhkiG9w0BAQsFADAUMRIwEAYDVQQDDAlhcHAtZ3Jvd2kwHhcNMjEwMzE4MTM1NDUxWhcNMzEwMzE4MTM1NjMxWjAUMRIwEAYDVQQDDAlhcHAtZ3Jvd2kwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCufX8fo4w8pIFyAkFtgx1x90pev0hHIkqo2PYvNvB0Q5Nk8nwNh/DdRTwb1VSrfm36k+iFo/4cAbXQoxbXlD3xhIg1536Cc8TzXV2sbRLwstsWx/BVqI1lQvmwp2QzjVB8NtBosubOwY4MpC9ff95eAcdwcXnwFPiryWKRxBvkhq7SyeZaxtSZA4Kr17ePkfwhRZmGlomXEmzSHUgwjgq8ja7Y4hTQmLzn0BK/3lgBbmNhdHqGEKuLMwT/4MpNnO/x7Zhze0wMVH5tbXALJ1LWkK1uxli0UKyss1NS4RNM3XhctAyJJocygLY7DEyAVyxAV31h4T6gh2c+R0RvVAWNAgMBAAEwDQYJKoZIhvcNAQELBQADggEBAD73CJOETy0VH/C+v7wLo+SgNMey84GDQfSVUC2yHnlLN2ifDq8v3oBI9Hgn7krKmRMgmDmpwfGh9K7K9WD6yMR/viDbyZi2219mHdCl64gISEFpIQNe5SGjLw0K3X2c93WJzIehvbyC1G5rUnRkUhYukiAraL/pKK5j++1XYdseieLuQMqDRENKYS3vUgG85nNBXZ8UOMmyH23oBKFHfZVZwPtTMtJh9u5zOh3xV9M587dGs0chKI9oHyIoJnt6eY90cqkClISymZhZxgGp51MhtTY1Tm0mB4KA0DR5LjGKBT4Y5nTdpC87cMpqlDNDMW9oHq2K/1jmXNFynP+vI38=",
+        "backchannel.logout.session.required": "false",
+        "client_credentials.use_refresh_token": "false",
+        "saml.signature.algorithm": "RSA_SHA1",
+        "saml.client.signature": "true",
+        "saml.signing.private.key": "MIIEowIBAAKCAQEArn1/H6OMPKSBcgJBbYMdcfdKXr9IRyJKqNj2LzbwdEOTZPJ8DYfw3UU8G9VUq35t+pPohaP+HAG10KMW15Q98YSINed+gnPE811drG0S8LLbFsfwVaiNZUL5sKdkM41QfDbQaLLmzsGODKQvX3/eXgHHcHF58BT4q8likcQb5Iau0snmWsbUmQOCq9e3j5H8IUWZhpaJlxJs0h1IMI4KvI2u2OIU0Ji859ASv95YAW5jYXR6hhCrizME/+DKTZzv8e2Yc3tMDFR+bW1wCydS1pCtbsZYtFCsrLNTUuETTN14XLQMiSaHMoC2OwxMgFcsQFd9YeE+oIdnPkdEb1QFjQIDAQABAoIBAHZhoFCn1eoCtevSie8xiFWcr7EuV2wjYMHDSOrpfCN1AVf4h59qfkiww0Ii7unWwejCVnvssebwZhjhvQqPgaMNBpiDsTnyL0npKzdjXPk+bxO6nFyRGTT9RofKWVn8YwGS8rxFu//EI4qCDb3d89CVpmisJE10/O0XmS9J/J6CfK6EjpTvCKH44BzPb0U3jdonZQBZEvkymXMFXUvTigbs00Lvkicz9YltumNGsPzz6N74/GIoLt0OMF62VV/qSWulm6Fj+DOrDQGAgatJq9YBOwYrZbdhxtYOAfqi+XPTPJsd40htnKzZ/KHPqpXXbBSW/0RKZStKtFSuOKq6pSUCgYEA73D7V7iLsxHKsMFUtvvBfQvrV28kBotd7smeHreJkcVYv4FpRqQyy067kFt42JvezlJyz/5b0uSl0S1JQLJUVQpZY+4FX0JlL138Im4HNPYMjDkhgeDEdwoUzvcfQ7RpmzNZLcSUL24jultwGHGWiz/jznGbENhs8zWO3mJZ1T8CgYEAuo6iVpeay8HcMnGoGRVvq6eWnTlsJdz8D69u/LHecccKIcMoPSKXpouj7p+Z9B3kEftbTdlownEyFIxFNwSnw8RC/KZN5Q18upGYiktUwfhqYDZuJf6clq+tp08gC4QW+tn3ZNZhaI8tLnju6LARmTM9PA47nGppI4SC3kZ89jMCgYAqov2+sxf9PQ/QxbxmERJ1R+gSW7IYkDybxr8nTRtsH64b+9lZQOfimBSCMiekuqzEJJ5ZNzv2o8x7IQtIP/kQY5VjXAEM42/NLXk2UE1sOtwlJA85Z2LUp7Do4cxpa/jaMByTL8wLXhtyldGyKJfcF/ZizowEReWwsTrNksnYVQKBgA6FPZN5112WqDnw6MGTDo8Qy0NPjeBgk+nwoLXgbkzyzhIUq5QelikrY0YWfBgpH3Ba3R9xFZtUzi4VQOnoXdp58zDRDO0QIK4w2Ouis2UpnbYBZo9kgvGjmOOV4Aula1h5EK1zlj9aLY0Zcpb/5U7EUzbScMda7PYLwVflqqJLAoGBALXS++Gx3M6Acv8+H8KNyq46+cYu0EGcUIo2OjsovL+p4xxmx+uDDjrIIMwLJW6aDyXVejqN4+ynQsIBWgl+tkmo/O4tB0MiyVUcjL0eg4vZQVLin2BoWF1u+Bhg0PO94doqinaesTTIjR1wgLaybvnNeYQCigXG2nO8UsyhlC/4",
+        "saml.assertion.signature": "true",
+        "saml.encrypt": "false",
+        "saml.server.signature": "true",
+        "saml_idp_initiated_sso_url_name": "growi.<DOMAIN>",
+        "exclude.session.state.from.auth.response": "false",
+        "saml_single_logout_service_url_redirect": "<PROTOCOL>://growi.<DOMAIN>/passport/saml/callback",
+        "saml_force_name_id_format": "false",
+        "tls.client.certificate.bound.access.tokens": "false",
+        "saml.authnstatement": "true",
+        "display.on.consent.screen": "false",
+        "saml_name_id_format": "username",
+        "saml_signature_canonicalization_method": "http://www.w3.org/2001/10/xml-exc-c14n#",
+        "saml.onetimeuse.condition": "false"
+    },
+    "authenticationFlowBindingOverrides": {},
+    "fullScopeAllowed": true,
+    "nodeReRegistrationTimeout": -1,
+    "protocolMappers": [
+        {
+            "name": "email",
+            "protocol": "saml",
+            "protocolMapper": "saml-user-property-mapper",
+            "consentRequired": false,
+            "config": {
+                "attribute.nameformat": "Basic",
+                "user.attribute": "email",
+                "friendly.name": "email",
+                "attribute.name": "email"
+            }
+        },
+        {
+            "name": "lastName",
+            "protocol": "saml",
+            "protocolMapper": "saml-user-property-mapper",
+            "consentRequired": false,
+            "config": {
+                "attribute.nameformat": "Basic",
+                "user.attribute": "lastName",
+                "friendly.name": "lastName",
+                "attribute.name": "lastName"
+            }
+        },
+        {
+            "name": "firstName",
+            "protocol": "saml",
+            "protocolMapper": "saml-user-property-mapper",
+            "consentRequired": false,
+            "config": {
+                "attribute.nameformat": "Basic",
+                "user.attribute": "firstName",
+                "friendly.name": "firstName",
+                "attribute.name": "firstName"
+            }
+        },
+        {
+            "name": "id",
+            "protocol": "saml",
+            "protocolMapper": "saml-user-property-mapper",
+            "consentRequired": false,
+            "config": {
+                "attribute.nameformat": "Basic",
+                "user.attribute": "id",
+                "friendly.name": "id",
+                "attribute.name": "id"
+            }
+        },
+        {
+            "name": "username",
+            "protocol": "saml",
+            "protocolMapper": "saml-user-property-mapper",
+            "consentRequired": false,
+            "config": {
+                "attribute.nameformat": "Basic",
+                "user.attribute": "username",
+                "friendly.name": "username",
+                "attribute.name": "username"
+            }
+        }
+    ],
+    "defaultClientScopes": [
+        "web-origins",
+        "role_list",
+        "profile",
+        "roles",
+        "email"
+    ],
+    "optionalClientScopes": [
+        "address",
+        "phone",
+        "offline_access",
+        "microprofile-jwt"
+    ],
+    "access": {
+        "view": true,
+        "configure": true,
+        "manage": true
+    }
+}

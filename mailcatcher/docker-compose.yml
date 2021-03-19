@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+
+  # MailCatcher
+  # https://hub.docker.com/r/sj26/mailcatcher
+  mailcatcher:
+    image: sj26/mailcatcher
+    container_name: mailcatcher
+    hostname: smtp-dummy
+    environment:
+      # for nginx-proxy
+      - VIRTUAL_HOST=mc.<DOMAIN>
+      - VIRTUAL_PORT=1080
+      - NETWORK_ACCESS=internal
+
+      - TZ=<TZ>
+    expose:
+      - '1080'
+      - '1025'
+    volumes:
+      # tzdata
+      - /usr/share/zoneinfo/<TZ>:/usr/share/zoneinfo/<TZ>:ro
+    restart: always
+    networks:
+      - container-link
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  default:
+    external:
+      name: bridge
+  container-link:
+    name: docker.internal

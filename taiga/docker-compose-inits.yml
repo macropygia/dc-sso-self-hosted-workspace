@@ -1,0 +1,43 @@
+version: "3.5"
+
+x-environment:
+  &default-back-environment
+  POSTGRES_DB: taiga
+  POSTGRES_USER: root
+  POSTGRES_PASSWORD: root
+  POSTGRES_HOST: pg-server
+  TAIGA_SECRET_KEY: "taiga-back-secret-key"
+  # these rabbitmq settings should be the same as
+  # in taiga-rabbitmq and taiga-events services
+  RABBITMQ_USER: taiga
+  RABBITMQ_PASS: taiga
+  CELERY_ENABLED: "False"
+  TZ: "<TZ>"
+
+x-volumes:
+  &default-back-volumes
+  - taiga-static-data:/taiga-back/static
+  - taiga-media-data:/taiga-back/media
+  # - ./config.py:/taiga-back/settings/config.py
+
+services:
+  taiga-manage:
+    image: taigaio/taiga-back:latest
+    environment: *default-back-environment
+    entrypoint: "python manage.py"
+    volumes: *default-back-volumes
+    networks:
+      - container-link
+
+volumes:
+  taiga-static-data:
+    external: true
+  taiga-media-data:
+    external: true
+
+networks:
+  default:
+    external:
+      name: bridge
+  container-link:
+    name: docker.internal

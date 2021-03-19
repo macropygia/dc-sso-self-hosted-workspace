@@ -1,0 +1,133 @@
+version: "3.8"
+
+# PENPOT
+# Based on: https://github.com/penpot/penpot/blob/develop/docker/images/docker-compose.yaml
+
+x-op-common: &common
+  restart: unless-stopped
+  networks:
+    - container-link
+  logging:
+    options:
+      max-size: "10m"
+      max-file: "3"
+
+services:
+  penpot-frontend:
+    image: penpotapp/frontend:latest
+    container_name: penpot-frontend
+    hostname: penpot-frontend
+    environment:
+      - PENPOT_GITLAB_CLIENT_ID=app-penpot
+
+      # for nginx-proxy
+      - VIRTUAL_HOST=penpot.<DOMAIN>
+      - VIRTUAL_PORT=80
+      #SSL#- SSL_POLICY=Mozilla-Modern
+      #NO_HSTS#- HSTS=off
+      #SELF_SIGN#- SSL_POLICY=self-sign
+
+      - TZ=<TZ>
+    expose:
+      - '80'
+    volumes:
+      - penpot-data:/opt/data
+      # tzdata
+      - /usr/share/zoneinfo/<TZ>:/usr/share/zoneinfo/<TZ>:ro
+    depends_on:
+      - penpot-backend
+      - penpot-exporter
+    <<: *common
+
+  penpot-backend:
+    image: penpotapp/backend:latest
+    container_name: penpot-backend
+    hostname: penpot-backend
+    environment:
+      # Should be set to the public domain when penpot is going to be
+      # served.
+      - PENPOT_PUBLIC_URI=<PROTOCOL>://penpot.<DOMAIN>
+
+      # Standard database connection parametes (only postgresql is supported):
+      - PENPOT_DATABASE_URI=postgresql://pg-server/penpot
+      - PENPOT_DATABASE_USERNAME=root
+      - PENPOT_DATABASE_PASSWORD=root
+
+      # Redis is used for the websockets notifications.
+      - PENPOT_REDIS_URI=redis://redis-server/0
+
+      # By default files upload by user are stored in local
+      # filesystem. But it can be configured to store in AWS S3 or
+      # completelly in de the database. Storing in the database makes
+      # the backups more easy but will make access to media less
+      # performant.
+      - PENPOT_STORAGE_BACKEND=fs
+      - PENPOT_STORAGE_FS_DIRECTORY=/opt/data/assets
+
+      # Telemetry. When enabled, a periodical process will send
+      # annonymous data about this instance. Telemetry data will
+      # enable us to learn on how the application is used based on
+      # real scenarios. If you want to help us, please leave it
+      # enabled. In any case you can see the source code of both
+      # client and server in the penpot repository.
+      - PENPOT_TELEMETRY_ENABLED=false
+
+      # Email sending configuration. By default emails are printed in
+      # console, but for production usage is recommeded to setup a
+      # real SMTP provider. Emails are used for confirm user
+      # registration.
+      - PENPOT_SMTP_ENABLED=true
+      - PENPOT_SMTP_DEFAULT_FROM=no-reply@penpot.<DOMAIN>
+      - PENPOT_SMTP_DEFAULT_REPLY_TO=no-reply@penpot.<DOMAIN>
+      - PENPOT_SMTP_HOST=<SMTP_SERVER>
+      - PENPOT_SMTP_PORT=<SMTP_PORT>
+      # - PENPOT_SMTP_USERNAME=...
+      # - PENPOT_SMTP_PASSWORD=...
+      - PENPOT_SMTP_TLS=false
+      # - PENPOT_SMTP_SSL=false
+
+      # SSO
+      - PENPOT_GITLAB_CLIENT_ID=app-penpot
+      - PENPOT_GITLAB_BASE_URI=<PROTOCOL>://auth.<DOMAIN>
+      - PENPOT_GITLAB_CLIENT_SECRET=<KEYCLOAK_CLIENT_SECRET>
+
+      - TZ=<TZ>
+    volumes:
+      - penpot-data:/opt/data
+
+      # Change OICD Endpoint URI to Keycloak instead of GitLab
+      - ./mount/gitlab.clj:/opt/bundle/main/app/http/oauth/gitlab.clj:ro
+
+      # CA bundle
+      #SELF_SIGN#- ../setup/self-sign-cert/cacerts:/usr/lib/jvm/adoptopenjdk-15-hotspot-amd64/lib/security/cacerts:ro
+      # tzdata
+      - /usr/share/zoneinfo/<TZ>:/usr/share/zoneinfo/<TZ>:ro
+    <<: *common
+    extra_hosts:
+      - auth.<DOMAIN>:<LOCAL_IP>
+
+  penpot-exporter:
+    image: penpotapp/exporter:latest
+    container_name: penpot-exporter
+    hostname: penpot-exporter
+    environment:
+      # Don't touch it; this uses internal docker network to
+      # communicate with the frontend.
+      - PENPOT_PUBLIC_URI=http://penpot-frontend
+
+      - TZ=<TZ>
+    volumes:
+      # tzdata
+      - /usr/share/zoneinfo/<TZ>:/usr/share/zoneinfo/<TZ>:ro
+    <<: *common
+
+volumes:
+  penpot-data:
+    external: true
+
+networks:
+  default:
+    external:
+      name: bridge
+  container-link:
+    name: docker.internal

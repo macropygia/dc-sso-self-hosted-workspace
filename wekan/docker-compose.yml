@@ -1,0 +1,164 @@
+version: '3.8'
+
+services:
+
+  # Wekan
+  # Image:
+  # https://quay.io/wekan/wekan
+  # Based on:
+  # https://github.com/wekan/wekan/blob/master/docker-compose.yml
+  wekan:
+    image: quay.io/wekan/wekan:latest
+    container_name: wekan
+    hostname: wekan-server
+    environment:
+      - MONGO_URL=mongodb://wekan:wekan@mongo-server:27017/wekan
+      - ROOT_URL=<PROTOCOL>://wekan.<DOMAIN>
+      - MAIL_URL=smtp://<SMTP_SERVER>:<SMTP_PORT>/?ignoreTLS=true&tls={rejectUnauthorized:false}
+      - MAIL_FROM=Wekan Notifications <no-reply@wekan.<DOMAIN>>
+      # ==== WEKAN API AND EXPORT BOARD ====
+      - WITH_API=true
+      #---------------------------------------------------------------
+      # ==== STORE ATTACHMENT ON SERVER FILESYSTEM INSTEAD OF MONGODB ====
+      # https://github.com/wekan/wekan/pull/2603
+      #- ATTACHMENTS_STORE_PATH = <pathname> # pathname can be relative or fullpath
+      #---------------------------------------------------------------
+      # ==== RICH TEXT EDITOR IN CARD COMMENTS ====
+      # https://github.com/wekan/wekan/pull/2560
+      - RICHER_CARD_COMMENT_EDITOR=false
+      #---------------------------------------------------------------
+      # ==== CARD OPENED, SEND WEBHOOK MESSAGE ====
+      # https://github.com/wekan/wekan/issues/2518
+      - CARD_OPENED_WEBHOOK_ENABLED=false
+      #---------------------------------------------------------------
+      # ==== Allow to shrink attached/pasted image ====
+      # https://github.com/wekan/wekan/pull/2544
+      #-MAX_IMAGE_PIXEL=1024
+      #-IMAGE_COMPRESS_RATIO=80
+      #---------------------------------------------------------------
+      # ==== NOTIFICATION TRAY AFTER READ DAYS BEFORE REMOVE =====
+      # Number of days after a notification is read before we remove it.
+      # Default: 2
+      #- NOTIFICATION_TRAY_AFTER_READ_DAYS_BEFORE_REMOVE=2
+      #---------------------------------------------------------------
+      # ==== BIGEVENTS DUE ETC NOTIFICATIONS =====
+      # https://github.com/wekan/wekan/pull/2541
+      # Introduced a system env var BIGEVENTS_PATTERN default as "NONE",
+      # so any activityType matches the pattern, system will send out
+      # notifications to all board members no matter they are watching
+      # or tracking the board or not. Owner of the wekan server can
+      # disable the feature by setting this variable to "NONE" or
+      # change the pattern to any valid regex. i.e. '|' delimited
+      # activityType names.
+      # a) Example
+      #- BIGEVENTS_PATTERN=due
+      # b) All
+      #- BIGEVENTS_PATTERN=received|start|due|end
+      # c) Disabled
+      - BIGEVENTS_PATTERN=NONE
+      #---------------------------------------------------------------
+      # ==== EMAIL DUE DATE NOTIFICATION =====
+      # https://github.com/wekan/wekan/pull/2536
+      # System timelines will be showing any user modification for
+      # dueat startat endat receivedat, also notification to
+      # the watchers and if any card is due, about due or past due.
+      #
+      # Notify due days, default is None, 2 days before and on the event day
+      #- NOTIFY_DUE_DAYS_BEFORE_AND_AFTER=2,0
+      #
+      # Notify due at hour of day. Default every morning at 8am. Can be 0-23.
+      # If env variable has parsing error, use default. Notification sent to watchers.
+      #- NOTIFY_DUE_AT_HOUR_OF_DAY=8
+      #-----------------------------------------------------------------
+      # ==== EMAIL NOTIFICATION TIMEOUT, ms =====
+      # Defaut: 30000 ms = 30s
+      #- EMAIL_NOTIFICATION_TIMEOUT=30000
+      #-----------------------------------------------------------------
+      # ==== CORS =====
+      # CORS: Set Access-Control-Allow-Origin header.
+      #- CORS=*
+      # CORS_ALLOW_HEADERS: Set Access-Control-Allow-Headers header.  "Authorization,Content-Type" is required for cross-origin use of the API.
+      #- CORS_ALLOW_HEADERS=Authorization,Content-Type
+      # CORS_EXPOSE_HEADERS: Set Access-Control-Expose-Headers header.  This is not needed for typical CORS situations
+      #- CORS_EXPOSE_HEADERS=*
+      #-----------------------------------------------------------------
+      # ==== BROWSER POLICY AND TRUSTED IFRAME URL ====
+      # Enable browser policy and allow one trusted URL that can have iframe that has Wekan embedded inside.
+      # Setting this to false is not recommended, it also disables all other browser policy protections
+      # and allows all iframing etc. See wekan/server/policy.js
+      - BROWSER_POLICY_ENABLED=true
+      # When browser policy is enabled, HTML code at this Trusted URL can have iframe that embeds Wekan inside.
+      #- TRUSTED_URL=https://intra.example.com
+      #-----------------------------------------------------------------
+      # ==== OUTGOING WEBHOOKS ====
+      # What to send to Outgoing Webhook, or leave out. If commented out the default values will be: cardId,listId,oldListId,boardId,comment,user,card,commentId,swimlaneId,customerField,customFieldValue
+      #- WEBHOOKS_ATTRIBUTES=cardId,listId,oldListId,boardId,comment,user,card,commentId
+      #-----------------------------------------------------------------
+      # ==== OAUTH2 KEYCLOAK ====
+      # https://github.com/wekan/wekan/wiki/Keycloak  <== MAPPING INFO, REQUIRED
+      - OAUTH2_ENABLED=true
+      - OAUTH2_CA_CERT=/opt/self-sign-ca.crt
+      # OAuth2 login style: popup or redirect.
+      - OAUTH2_LOGIN_STYLE=redirect
+      - OAUTH2_CLIENT_ID=app-wekan
+      - OAUTH2_SERVER_URL=<PROTOCOL>://auth.<DOMAIN>/auth
+      - OAUTH2_AUTH_ENDPOINT=/realms/<REALM>/protocol/openid-connect/auth
+      - OAUTH2_USERINFO_ENDPOINT=/realms/<REALM>/protocol/openid-connect/userinfo
+      - OAUTH2_TOKEN_ENDPOINT=/realms/<REALM>/protocol/openid-connect/token
+      - OAUTH2_SECRET=<KEYCLOAK_CLIENT_SECRET>
+      - OAUTH2_ID_MAP=id
+      - OAUTH2_USERNAME_MAP=username
+      - OAUTH2_FULLNAME_MAP=fullname
+      - OAUTH2_EMAIL_MAP=email
+      #---------------------------------------------------------------------
+      # ==== LOGOUT TIMER, probably does not work yet ====
+      # LOGOUT_WITH_TIMER : Enables or not the option logout with timer
+      # example : LOGOUT_WITH_TIMER=true
+      #- LOGOUT_WITH_TIMER=
+      #
+      # LOGOUT_IN : The number of days
+      # example : LOGOUT_IN=1
+      #- LOGOUT_IN=
+      #
+      # LOGOUT_ON_HOURS : The number of hours
+      # example : LOGOUT_ON_HOURS=9
+      #- LOGOUT_ON_HOURS=
+      #
+      # LOGOUT_ON_MINUTES : The number of minutes
+      # example : LOGOUT_ON_MINUTES=55
+      #- LOGOUT_ON_MINUTES=
+      #-------------------------------------------------------------------
+      # Hide password login form
+      # - PASSWORD_LOGIN_ENABLED=true
+
+      # for nginx-proxy
+      - VIRTUAL_HOST=wekan.<DOMAIN>
+      - VIRTUAL_PORT=8080
+      #SSL#- SSL_POLICY=Mozilla-Modern
+      #NO_HSTS#- HSTS=off
+      #SELF_SIGN#- SSL_POLICY=self-sign
+
+      - TZ=<TZ>
+    expose:
+      - '8080'
+    volumes:
+      # CA bundle
+      #SELF_SIGN#- ../setup/self-sign-cert/ca.crt:/opt/self-sign-ca.crt:ro
+      # tzdata
+      - /usr/share/zoneinfo/<TZ>:/usr/share/zoneinfo/<TZ>:ro
+    restart: unless-stopped
+    networks:
+      - container-link
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    extra_hosts:
+      - auth.<DOMAIN>:<LOCAL_IP>
+
+networks:
+  default:
+    external:
+      name: bridge
+  container-link:
+    name: docker.internal

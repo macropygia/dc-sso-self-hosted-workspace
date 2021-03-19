@@ -1,0 +1,80 @@
+version: '3.8'
+
+
+services:
+
+  # Growi
+  # Image:
+  # https://hub.docker.com/r/weseek/growi
+  # Docs:
+  # https://docs.growi.org/ja/admin-guide/getting-started/docker-compose.html
+  # https://docs.growi.org/ja/admin-guide/admin-cookbook/env-vars.html
+  growi:
+    image: weseek/growi:latest-nocdn
+    container_name: growi
+    hostname: growi-server
+    environment:
+      - MONGO_URI=mongodb://growi:growi@mongo-server:27017/growi
+      - NO_CDN=true
+      - ELASTICSEARCH_URI=http://es-server:9200/growi
+      - REDIS_URI=http://redis-server:6379
+      - FILE_UPLOAD=local
+      #- FILE_UPLOAD_DISABLED=false
+      - MAX_FILE_SIZE=10000000
+      - FILE_UPLOAD_TOTAL_LIMIT=1000000000
+      #- MATHJAX=1
+      #- NCHAN_URI=
+      #- HACKMD_URI=https://codimd.<DOMAIN>
+      #- HACKMD_URI_FOR_SERVER=https://codimd-server:3000
+      #- PLANTUML_URL=
+      #- BLOCKDIAG_URI=
+      #- DRAWIO_URI=
+      - APP_SITE_URL=<PROTOCOL>://growi.<DOMAIN>
+      - LOCAL_STRATEGY_ENABLED=true
+      - SAML_ENABLED=true
+      - SAML_ENTRY_POINT=<PROTOCOL>://auth.<DOMAIN>/auth/realms/<REALM>/protocol/saml/clients/growi.<DOMAIN>
+      - SAML_ISSUER=app-growi
+      - SAML_ATTR_MAPPING_ID=id
+      - SAML_ATTR_MAPPING_USERNAME=username
+      - SAML_ATTR_MAPPING_MAIL=email
+      - SAML_ATTR_MAPPING_FIRST_NAME=firstName
+      - SAML_ATTR_MAPPING_LAST_NAME=lastName
+      - |-
+        SAML_CERT=-----BEGIN CERTIFICATE-----
+        <KEYCLOAK_REALM_RSA256_CERTIFICATE>
+        -----END CERTIFICATE-----
+
+      # for nginx-proxy
+      - VIRTUAL_HOST=growi.<DOMAIN>
+      - VIRTUAL_PORT=3000
+      #SSL#- SSL_POLICY=Mozilla-Modern
+      #NO_HSTS#- HSTS=off
+      #SELF_SIGN#- SSL_POLICY=self-sign
+
+      - TZ=<TZ>
+    expose:
+      - '3000'
+    volumes:
+      - growi-data:/data
+      # tzdata
+      - /usr/share/zoneinfo/<TZ>:/usr/share/zoneinfo/<TZ>:ro
+    restart: unless-stopped
+    networks:
+      - container-link
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    extra_hosts:
+      - auth.<DOMAIN>:<LOCAL_IP>
+
+volumes:
+  growi-data:
+    external: true
+
+networks:
+  default:
+    external:
+      name: bridge
+  container-link:
+    name: docker.internal

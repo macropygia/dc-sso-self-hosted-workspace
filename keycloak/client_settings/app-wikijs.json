@@ -1,0 +1,118 @@
+{
+    "clientId": "app-wikijs",
+    "rootUrl": "<PROTOCOL>://wikijs.<DOMAIN>",
+    "adminUrl": "<PROTOCOL>://wikijs.<DOMAIN>/login/WIKIJS_REDIRECT_URL_HASH/callback",
+    "surrogateAuthRequired": false,
+    "enabled": true,
+    "alwaysDisplayInConsole": false,
+    "clientAuthenticatorType": "client-secret",
+    "redirectUris": [
+        "<PROTOCOL>://wikijs.<DOMAIN>/login/WIKIJS_REDIRECT_URL_HASH/callback"
+    ],
+    "webOrigins": [],
+    "notBefore": 0,
+    "bearerOnly": false,
+    "consentRequired": false,
+    "standardFlowEnabled": true,
+    "implicitFlowEnabled": false,
+    "directAccessGrantsEnabled": false,
+    "serviceAccountsEnabled": false,
+    "publicClient": false,
+    "frontchannelLogout": true,
+    "protocol": "saml",
+    "attributes": {
+        "saml.assertion.signature": "false",
+        "saml.force.post.binding": "true",
+        "saml.multivalued.roles": "false",
+        "saml.encrypt": "false",
+        "saml.server.signature": "true",
+        "saml_idp_initiated_sso_url_name": "wikijs.<DOMAIN>",
+        "backchannel.logout.revoke.offline.tokens": "false",
+        "saml.server.signature.keyinfo.ext": "false",
+        "exclude.session.state.from.auth.response": "false",
+        "saml.signing.certificate": "MIICozCCAYsCBgF4RcD1ZjANBgkqhkiG9w0BAQsFADAVMRMwEQYDVQQDDAphcHAtd2lraWpzMB4XDTIxMDMxODE0MzExNloXDTMxMDMxODE0MzI1NlowFTETMBEGA1UEAwwKYXBwLXdpa2lqczCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAID3nGxISJZDD2vT8dRU6Yay/ODUFVoZzln+jN1jIKChD/2b5hEwot/cTQpEnqxjLLsY3IyE361PGorpAjFxtYDS7Nduf3bBcrKXSlbGD36p8U9UppiPhJTuO3KW5YJW9zeMt8qBNDVolTz9wt+J/qfCMNY7WAJRURkzqAInyh9TzTqM5yr+TI7PGs4C02a7MKgFErE6/CvjkgqMZzcSAz+JgKK5CoeN3cwu48qoO5EL1M4C6NdHNS5VENy7QK/Hcn8YsJkESfkbjAEJc6hgLjOTLCupRY61TMs8IxyB64ES6hKZzgRoh3EMNHnq8CVtDR21SQ7CllIRCcXfq6fM9e8CAwEAATANBgkqhkiG9w0BAQsFAAOCAQEAGH9yWfRTaw+AJRjhYEU3oW5n2vWbFi+fa84l5+xbIWNvOXNUw9AXE+OQGG76Yufnij8kIiyV0pwAkBF7h2BhusjKWiKFaCIIPTUDOcFwyqb8cVah00j7tvZM6H3+TV8GhIc3t8SjVuO2LRDhoQp/rEvSvQOcSbDi8jpYXQjXw/osmO83WyzhZyBmWyASlxdtH+uTdZjK76UC5AlEQmWzlmIK2zWTMgkn0lJS7LB26spW0Tn2S2AOAcssth1rEFbZ7dFp0sMSqijQUcF4SZu8p1HKQ3c8gxafY9qy8gBRcC3GF+qiydEGdiDU4ZzboF3xYK7Oa0u1IApSqE0/bCgX3g==",
+        "backchannel.logout.session.required": "false",
+        "saml.signature.algorithm": "RSA_SHA256",
+        "client_credentials.use_refresh_token": "false",
+        "saml_force_name_id_format": "false",
+        "saml.client.signature": "true",
+        "tls.client.certificate.bound.access.tokens": "false",
+        "saml.authnstatement": "true",
+        "display.on.consent.screen": "false",
+        "saml_name_id_format": "email",
+        "saml.signing.private.key": "MIIEowIBAAKCAQEAgPecbEhIlkMPa9Px1FTphrL84NQVWhnOWf6M3WMgoKEP/ZvmETCi39xNCkSerGMsuxjcjITfrU8aiukCMXG1gNLs125/dsFyspdKVsYPfqnxT1SmmI+ElO47cpblglb3N4y3yoE0NWiVPP3C34n+p8Iw1jtYAlFRGTOoAifKH1PNOoznKv5Mjs8azgLTZrswqAUSsTr8K+OSCoxnNxIDP4mAorkKh43dzC7jyqg7kQvUzgLo10c1LlUQ3LtAr8dyfxiwmQRJ+RuMAQlzqGAuM5MsK6lFjrVMyzwjHIHrgRLqEpnOBGiHcQw0eerwJW0NHbVJDsKWUhEJxd+rp8z17wIDAQABAoIBACY/SNikJ0LI6I3l8VYzSH52HqDexOZPuO7fmw8dEtQQcBmaXoTCk8soHoDpENW3I9Do8p+J2HwhdZG0wL3BJz7pTuwlDRA/FrD4RUeuvXGnHLWWOUINbhhs/pxhO/eHqxGCXg9kegNM3NWVvHFnD2rZIHqoZtVpIFAFDdJ10m+vkh/s53TXnO3WZ1dIBN9+uNZO8oIKH/vr9xQ+vE8mBW+LQcQ3CnivQCqSBxoANKGE9zPjeMu+80jhGqcyMQyosOgp+3P4+ViSWIiw0fKzzaPgEj/b9h5mUr4ka7wjrOlhS2UaWsQzsXIV/o2NOybmD1t1YJoazOjfTygKLUwlboECgYEAzSd4Z8UxqIyfwhfTbrnO0WwjYuyx1UzKSXmZtv/MhabYRH0mAXrvJQIL3drVeUQibbHQe8gLpYNxs5kgmYReDJIFe0mo+Rw0DGSh0n3rHiqJgBJJTrMw2Wb4uEChuhwdoJEyPLdeX9qI2oIrbtJXvJrxLzeKAcNuRnE+qhmMiX8CgYEAoO5D+cN8o+/OcSK55uvIYh447GVggSXbO5pNWmswWx6Owt8EfCvXCBw+tr/w6crBxgnhOnBV+DLCcR9l29FZTvGe4hfs+X1WH7xQhLjKg69KmxUhgXFMD9y2xkLiVtcL4Qz/rEuINbyqOZ/sfVGXk5zIeRp0tSyINYJXs93Fa5ECgYEAhXmrpeAvedjcTDySLFUpkSmJMGCNJxjJ99nsv5pX55Dw3kaKRqZEF1DohZROFZLVz4bD/PTfVvVZMZ9sDVWIlycd9+Op00GdP37tpfSU11CXm0LKfTCqlJehNMegMWT/hatSAxzOgxC8v2W3emfR+3zXdH/vA0yyX5RoT+VFgWMCgYBov+4bCrV8d8EmPvZGar65rvZaWPph1eRHfX5QFmkZRmCiU0u2D0seClR/25vScZmDcDbcNPagYVnTDB7e3/uDuR40CGLFWmHOsmKuoSGgaV7kZvKyMK7TvFRz5GEzKTKgQDfDTD7Sy4T5kTD7uToyaODMgv3oV54pRjgT6YxxIQKBgGp0ZtRjcJrHFJRalTsL1HWSOX+KEhkfGbeCe9l3GcLmNiB3gZSSDIe21sQLr++nXWTwFeyggs8z/fle+2ES1l22KzbpXk3weAaNy2MaerD6t3gegeg8hom7sEDUzK16BJ/zXjrnyUYSkGR3AzT59sT1ttKbfRXlzsOJQ1lvsEZx",
+        "saml_signature_canonicalization_method": "http://www.w3.org/2001/10/xml-exc-c14n#",
+        "saml.onetimeuse.condition": "false"
+    },
+    "authenticationFlowBindingOverrides": {},
+    "fullScopeAllowed": true,
+    "nodeReRegistrationTimeout": -1,
+    "protocolMappers": [
+        {
+            "name": "id",
+            "protocol": "saml",
+            "protocolMapper": "saml-user-property-mapper",
+            "consentRequired": false,
+            "config": {
+                "attribute.nameformat": "Basic",
+                "user.attribute": "id",
+                "friendly.name": "id",
+                "attribute.name": "id"
+            }
+        },
+        {
+            "name": "displayName",
+            "protocol": "saml",
+            "protocolMapper": "saml-user-attribute-mapper",
+            "consentRequired": false,
+            "config": {
+                "attribute.nameformat": "Basic",
+                "user.attribute": "displayName",
+                "friendly.name": "displayName",
+                "attribute.name": "displayName"
+            }
+        },
+        {
+            "name": "username",
+            "protocol": "saml",
+            "protocolMapper": "saml-user-property-mapper",
+            "consentRequired": false,
+            "config": {
+                "attribute.nameformat": "Basic",
+                "user.attribute": "username",
+                "friendly.name": "username",
+                "attribute.name": "username"
+            }
+        },
+        {
+            "name": "email",
+            "protocol": "saml",
+            "protocolMapper": "saml-user-property-mapper",
+            "consentRequired": false,
+            "config": {
+                "attribute.nameformat": "Basic",
+                "user.attribute": "email",
+                "friendly.name": "email",
+                "attribute.name": "email"
+            }
+        }
+    ],
+    "defaultClientScopes": [
+        "web-origins",
+        "role_list",
+        "profile",
+        "roles",
+        "email"
+    ],
+    "optionalClientScopes": [
+        "address",
+        "phone",
+        "offline_access",
+        "microprofile-jwt"
+    ],
+    "access": {
+        "view": true,
+        "configure": true,
+        "manage": true
+    }
+}

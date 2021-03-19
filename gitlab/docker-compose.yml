@@ -1,0 +1,138 @@
+version: '3.8'
+
+services:
+
+  # GitLab
+  # Image:
+  # https://hub.docker.com/r/sameersbn/gitlab/
+  # Docs:
+  # https://github.com/sameersbn/docker-gitlab/blob/master/README.md
+  # https://github.com/sameersbn/docker-gitlab/blob/master/docker-compose.yml
+  gitlab:
+    image: sameersbn/gitlab:latest
+    container_name: gitlab
+    hostname: gitlab-server
+    healthcheck:
+      test: ["CMD", "/usr/local/sbin/healthcheck"]
+      interval: 5m
+      timeout: 10s
+      retries: 3
+      start_period: 5m
+    environment:
+      - DEBUG=false
+
+      - DB_ADAPTER=postgresql
+      - DB_HOST=pg-server
+      - DB_PORT=5432
+      - DB_USER=root
+      - DB_PASS=root
+      - DB_NAME=gitlab
+
+      - REDIS_HOST=redis-server
+      - REDIS_PORT=6379
+
+      - GITLAB_TIMEZONE=Tokyo
+
+      #SSL#- GITLAB_HTTPS=true
+      #NO_SSL#- GITLAB_HTTPS=false
+      #SELF_SIGN#- SSL_SELF_SIGNED=true
+
+      - GITLAB_HOST=gitlab-server
+      - GITLAB_PORT=80
+      - GITLAB_SSH_PORT=22
+      - GITLAB_RELATIVE_URL_ROOT=
+      - GITLAB_SECRETS_DB_KEY_BASE=<ALNUM_48>
+      - GITLAB_SECRETS_SECRET_KEY_BASE=<ALNUM_48>
+      - GITLAB_SECRETS_OTP_KEY_BASE=<ALNUM_48>
+
+      - GITLAB_ROOT_PASSWORD=Pa55w@rd
+      - GITLAB_ROOT_EMAIL=webmaster@<DOMAIN>
+
+      - GITLAB_NOTIFY_ON_BROKEN_BUILDS=true
+      - GITLAB_NOTIFY_PUSHER=false
+
+      - GITLAB_EMAIL=notifications@gitlab.<DOMAIN>
+      - GITLAB_EMAIL_REPLY_TO=no-reply@gitlab.<DOMAIN>
+      - GITLAB_INCOMING_EMAIL_ADDRESS=reply@gitlab.<DOMAIN>
+
+      - GITLAB_BACKUP_SCHEDULE=daily
+      - GITLAB_BACKUP_TIME=01:00
+
+      - SMTP_ENABLED=true
+      #- SMTP_DOMAIN=
+      - SMTP_HOST=<SMTP_SERVER>
+      - SMTP_PORT=<SMTP_PORT>
+      #- SMTP_USER=
+      #- SMTP_PASS=
+      - SMTP_STARTTLS=true
+      #- SMTP_TLS=false
+
+      - IMAP_ENABLED=false
+
+      - OAUTH_ENABLED=true
+      #- OAUTH_AUTO_SIGN_IN_WITH_PROVIDER=saml
+      - OAUTH_ALLOW_SSO=saml
+      - OAUTH_BLOCK_AUTO_CREATED_USERS=false
+      - OAUTH_AUTO_LINK_LDAP_USER=false
+      - OAUTH_AUTO_LINK_SAML_USER=true
+      - OAUTH_EXTERNAL_PROVIDERS=
+
+      - OAUTH_SAML_ASSERTION_CONSUMER_SERVICE_URL=<PROTOCOL>://gitlab.<DOMAIN>/users/auth/saml/callback
+      - OAUTH_SAML_IDP_CERT_FINGERPRINT=<KEYCLOAK_REALM_RSA256_FINGERPRINT>
+      - OAUTH_SAML_IDP_SSO_TARGET_URL=<PROTOCOL>://auth.<DOMAIN>/auth/realms/<REALM>/protocol/saml/clients/gitlab.<DOMAIN>
+      - OAUTH_SAML_ISSUER=app-gitlab
+      - OAUTH_SAML_LABEL="Keycloak Login"
+      - OAUTH_SAML_NAME_IDENTIFIER_FORMAT=urn:oasis:names:tc:SAML:2.0:nameid-format:persistent
+      #- OAUTH_SAML_NAME_IDENTIFIER_FORMAT=urn:oasis:names:tc:SAML:2.0:nameid-format:transient
+      #- OAUTH_SAML_GROUPS_ATTRIBUTE=
+      #- OAUTH_SAML_EXTERNAL_GROUPS=
+      - OAUTH_SAML_ATTRIBUTE_STATEMENTS_EMAIL=email
+      - OAUTH_SAML_ATTRIBUTE_STATEMENTS_NAME=name
+      - OAUTH_SAML_ATTRIBUTE_STATEMENTS_USERNAME=username
+      - OAUTH_SAML_ATTRIBUTE_STATEMENTS_FIRST_NAME=first_name
+      - OAUTH_SAML_ATTRIBUTE_STATEMENTS_LAST_NAME=last_name
+
+      - GITLAB_MATTERMOST_ENABLED=false
+      - GITLAB_MATTERMOST_URL=
+
+      # for nginx-proxy
+      - VIRTUAL_HOST=gitlab.<DOMAIN>
+      - VIRTUAL_PORT=80
+      #SSL#- SSL_POLICY=Mozilla-Modern
+      #NO_HSTS#- HSTS=off
+      #SELF_SIGN#- SSL_POLICY=self-sign
+
+      - TZ=<TZ>
+    expose:
+      #- '22'
+      - '80'
+    volumes:
+      - gitlab-data:/home/git/data
+      - gitlab-logs:/var/log/gitlab
+      - gitlab-node_modules:/home/git/gitlab/node_modules
+      # tzdata
+      - /usr/share/zoneinfo/<TZ>:/usr/share/zoneinfo/<TZ>:ro
+    restart: unless-stopped
+    networks:
+      - container-link
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    extra_hosts:
+      - auth.<DOMAIN>:<LOCAL_IP>
+
+volumes:
+  gitlab-data:
+    external: true
+  gitlab-logs:
+    external: true
+  gitlab-node_modules:
+    external: true
+
+networks:
+  default:
+    external:
+      name: bridge
+  container-link:
+    name: docker.internal

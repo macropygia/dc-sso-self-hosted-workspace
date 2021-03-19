@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+
+  # rocket.chat
+  # Docs:
+  # https://docs.rocket.chat/installation/docker-containers/
+  # https://docs.rocket.chat/installation/docker-containers/docker-compose
+  # https://github.com/RocketChat/Rocket.Chat/blob/develop/docker-compose.yml
+  rocketchat:
+    image: rocketchat/rocket.chat:latest
+    container_name: rocketchat
+    hostname: rc-server
+    command: >
+      bash -c
+        "for i in `seq 1 30`; do
+          node main.js &&
+          s=$$? && break || s=$$?;
+          echo \"Tried $$i times. Waiting 5 secs...\";
+          sleep 5;
+        done; (exit $$s)"
+    environment:
+      - PORT=3000
+      - ROOT_URL=<PROTOCOL>://rc.<DOMAIN>
+      - MONGO_URL=mongodb://rocketchat:rocketchat@mongo-server:27017/rocketchat
+      - MONGO_OPLOG_URL=mongodb://oplogger:oplogger@mongo-server:27017/local
+      - MAIL_URL=smtp://<SMTP_SERVER>
+      #- HTTP_PROXY=http://rc.<DOMAIN>
+      - HTTPS_PROXY=<PROTOCOL>://rc.<DOMAIN>
+
+      # for nginx-proxy
+      - VIRTUAL_HOST=rc.<DOMAIN>
+      - VIRTUAL_PORT=3000
+      #SSL#- SSL_POLICY=Mozilla-Modern
+      #NO_HSTS#- HSTS=off
+      #SELF_SIGN#- SSL_POLICY=self-sign
+
+      - TZ=<TZ>
+    expose:
+      - '3000'
+    volumes:
+      - rocketchat-uploads:/app/uploads
+      # tzdata
+      - /usr/share/zoneinfo/<TZ>:/usr/share/zoneinfo/<TZ>:ro
+    restart: unless-stopped
+    networks:
+      - container-link
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    extra_hosts:
+      - auth.<DOMAIN>:<LOCAL_IP>
+      - collector.rocket.chat:192.0.2.0
+
+volumes:
+  rocketchat-uploads:
+    external: true
+
+networks:
+  default:
+    external:
+      name: bridge
+  container-link:
+    name: docker.internal

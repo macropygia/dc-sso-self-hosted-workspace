@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+
+  # Nextcloud
+  # Image:
+  # https://hub.docker.com/_/nextcloud
+  # Docs:
+  # https://github.com/nextcloud/docker
+  nextcloud:
+    image: nextcloud:21-apache
+    container_name: nextcloud
+    hostname: nc-server
+    environment:
+      - VIRTUAL_HOST=nc.<DOMAIN>
+      - POSTGRES_DB=nextcloud
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_HOST=pg-server
+      - NEXTCLOUD_ADMIN_USER=webmaster
+      - NEXTCLOUD_ADMIN_PASSWORD=Pa55w@rd
+      - REDIS_HOST=redis-server
+      #- REDIS_HOST_PORT=6379
+      #- REDIS_HOST_PASSWORD=
+
+      # for nginx-proxy
+      #- VIRTUAL_HOST=nc.<DOMAIN>
+      - VIRTUAL_PORT=80
+      #SSL#- SSL_POLICY=Mozilla-Modern
+      #NO_HSTS#- HSTS=off
+      #SELF_SIGN#- SSL_POLICY=self-sign
+
+      - TZ=<TZ>
+    expose:
+      - '80'
+    volumes:
+      - nextcloud-main:/var/www/html
+      - nextcloud-apps:/var/www/html/custom_apps
+      - ./volumes/config:/var/www/html/config
+      - nextcloud-data:/var/www/html/data
+      # Custom theme
+      #- /path/to/theme:/var/www/html/themes/<YOUR_CUSTOM_THEME>
+      # tzdata
+      - /usr/share/zoneinfo/<TZ>:/usr/share/zoneinfo/<TZ>:ro
+    restart: unless-stopped
+    networks:
+      - container-link
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+    extra_hosts:
+      - auth.<DOMAIN>:<LOCAL_IP>
+
+volumes:
+  nextcloud-main:
+    external: true
+  nextcloud-apps:
+    external: true
+  nextcloud-data:
+    external: true
+
+networks:
+  default:
+    external:
+      name: bridge
+  container-link:
+    name: docker.internal

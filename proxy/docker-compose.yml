@@ -1,0 +1,70 @@
+version: '3.8'
+
+x-op-common: &common
+  restart: always
+  networks:
+    - container-link
+  logging:
+    options:
+      max-size: "10m"
+      max-file: "3"
+
+services:
+
+  # nginx-proxy
+  # https://hub.docker.com/r/jwilder/nginx-proxy
+  proxy:
+    image: jwilder/nginx-proxy:alpine
+    container_name: proxy
+    hostname: proxy-server
+    environment:
+      - TZ=<TZ>
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - ./mount/vhost.d:/etc/nginx/vhost.d
+      - ./mount/htpasswd:/etc/nginx/htpasswd
+      - ./mount/certs:/etc/nginx/certs
+      - proxy-dhparam:/etc/nginx/dhparam
+      - /var/run/docker.sock:/tmp/docker.sock
+
+      # Replace nginx.tmpl with https://github.com/nginx-proxy/nginx-proxy/pull/1179
+      # - To activate "<domain>_locations" file
+      #- ./mount/nginx.tmpl:/app/nginx.tmpl:ro
+
+      # Replace proxy.conf
+      #- ./mount/proxy.conf:/etc/nginx/proxy.conf:ro
+
+      # tzdata
+      - /usr/share/zoneinfo/<TZ>:/usr/share/zoneinfo/<TZ>:ro
+    <<: *common
+
+  # https://github.com/nginx-proxy/docker-letsencrypt-nginx-proxy-companion/wiki/Docker-Compose
+  #letsencrypt:
+  #  image: jrcs/letsencrypt-nginx-proxy-companion
+  #  container_name: letsencrypt
+  #  hostname: letsencrypt-server
+  #  environment:
+  #    - NGINX_PROXY_CONTAINER=proxy
+  #    - TZ=<TZ>
+  #  volumes:
+  #    - ./mount/vhost.d:/etc/nginx/vhost.d
+  #    - ./mount/htpasswd:/etc/nginx/htpasswd
+  #    - ./mount/certs:/etc/nginx/certs
+  #    - proxy-dhparam:/etc/nginx/dhparam
+  #    - /var/run/docker.sock:/var/run/docker.sock:ro
+  #    # tzdata
+  #    - /usr/share/zoneinfo/<TZ>:/usr/share/zoneinfo/<TZ>:ro
+  #  <<: *common
+
+volumes:
+  proxy-dhparam:
+    external: true
+
+networks:
+  default:
+    external:
+      name: bridge
+  container-link:
+    name: docker.internal

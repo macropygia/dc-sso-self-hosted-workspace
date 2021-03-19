@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+
+  # Elasticsearch
+  # https://hub.docker.com/_/elasticsearch
+  # https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.8.13
+    container_name: elasticsearch
+    hostname: es-server
+    environment:
+      - discovery.type=single-node
+      - http.host=0.0.0.0
+      #- http.cors.enabled=true
+      #- http.cors.allow-origin=
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms2G -Xmx2G"
+
+      - TZ=<TZ>
+    command: >
+      /bin/sh -c
+        "./bin/elasticsearch-plugin install analysis-kuromoji;
+        ./bin/elasticsearch-plugin install analysis-icu;
+        /usr/local/bin/docker-entrypoint.sh"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    expose:
+      - '9200'
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+      # tzdata
+      - /usr/share/zoneinfo/<TZ>:/usr/share/zoneinfo/<TZ>:ro
+    restart: always
+    networks:
+      - container-link
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  elasticsearch-data:
+    external: true
+
+networks:
+  default:
+    external:
+      name: bridge
+  container-link:
+    name: docker.internal

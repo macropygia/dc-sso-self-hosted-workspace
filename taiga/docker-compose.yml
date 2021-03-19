@@ -1,0 +1,179 @@
+version: "3.8"
+
+# TAIGA
+# Based on:
+# https://github.com/taigaio/taiga-docker
+# Doc:
+# https://taigaio.github.io/taiga-doc/dist/setup-production.html
+
+x-environment:
+  &default-back-environment
+  # Database settings
+  POSTGRES_DB: taiga
+  POSTGRES_USER: root
+  POSTGRES_PASSWORD: root
+  POSTGRES_HOST: pg-server
+
+  # Taiga settings
+  TAIGA_SECRET_KEY: "<TAIGA_SECRET_KEY>"
+  TAIGA_SITES_DOMAIN: "taiga.<DOMAIN>"
+  TAIGA_SITES_SCHEME: "<PROTOCOL>"
+
+  # Email settings. Uncomment following lines and configure your SMTP server
+  # EMAIL_BACKEND: "django.core.mail.backends.smtp.EmailBackend"
+  DEFAULT_FROM_EMAIL: "no-reply@taiga.<DOMAIN>"
+  EMAIL_USE_TLS: "True"
+  EMAIL_USE_SSL: "False"
+  EMAIL_HOST: "<SMTP_SERVER>"
+  EMAIL_PORT: <SMTP_PORT>
+  # EMAIL_HOST_USER: "user"
+  # EMAIL_HOST_PASSWORD: "password"
+
+  # Rabbitmq settings
+  # Should be the same as in taiga-async-rabbitmq and taiga-events-rabbitmq
+  #RABBITMQ_USER: root
+  #RABBITMQ_PASS: root
+  EVENTS_PUSH_BACKEND_URL: "amqp://root:root@rmq-server:5672/taiga"
+  CELERY_BROKER_URL: "amqp://root:root@rmq-server:5672/taiga"
+
+  # Telemetry settings
+  ENABLE_TELEMETRY: "False"
+
+  # Additional Options
+  PUBLIC_REGISTER_ENABLED: "True" # Require to enable GitLab Auth
+  ENABLE_GITLAB_AUTH: "True"
+  GITLAB_API_CLIENT_ID: "app-taiga"
+  GITLAB_API_CLIENT_SECRET: "<KEYCLOAK_CLIENT_SECRET>"
+  GITLAB_URL: "<PROTOCOL>://auth.<DOMAIN>"
+
+  TZ: "<TZ>"
+
+x-op-common: &common
+  restart: unless-stopped
+  networks:
+    - container-link
+  logging:
+    options:
+      max-size: "10m"
+      max-file: "3"
+
+services:
+  taiga-back:
+    image: taigaio/taiga-back:latest
+    container_name: taiga-back
+    hostname: taiga-back
+    environment: *default-back-environment
+    volumes:
+      - taiga-static-data:/taiga-back/static
+      - taiga-media-data:/taiga-back/media
+
+      # Fix request.post issue
+      - ./mount/taiga-contrib-gitlab-auth/connector.py:/opt/venv/lib/python3.7/site-packages/taiga_contrib_gitlab_auth/connector.py
+
+      # CA bundle
+      #SELF_SIGN#- ../setup/self-sign-cert/ca-certificates.crt:/opt/venv/lib/python3.7/site-packages/certifi/cacert.pem:ro
+      # tzdata
+      - /usr/share/zoneinfo/<TZ>:/usr/share/zoneinfo/<TZ>:ro
+    extra_hosts:
+      - auth.<DOMAIN>:<LOCAL_IP>
+    <<: *common
+
+  taiga-async:
+    image: taigaio/taiga-back:latest
+    container_name: taiga-async
+    hostname: taiga-async
+    entrypoint: ["/taiga-back/docker/async_entrypoint.sh"]
+    environment: *default-back-environment
+    volumes:
+      - taiga-static-data:/taiga-back/static
+      - taiga-media-data:/taiga-back/media
+
+      # tzdata
+      - /usr/share/zoneinfo/<TZ>:/usr/share/zoneinfo/<TZ>:ro
+    depends_on:
+      - taiga-back
+    <<: *common
+
+  taiga-front:
+    image: taigaio/taiga-front:latest
+    container_name: taiga-front
+    hostname: taiga-front
+    environment:
+      TAIGA_URL: "http://taiga.<DOMAIN>"
+      TAIGA_WEBSOCKETS_URL: "ws://taiga.<DOMAIN>"
+
+      TZ: "<TZ>"
+    volumes:
+      - ./mount/taiga-front/config.json:/usr/share/nginx/html/conf.json
+    expose:
+      - '80'
+    <<: *common
+
+  taiga-events:
+    image: taigaio/taiga-events:latest
+    container_name: taiga-events
+    hostname: taiga-events
+    environment:
+      RABBITMQ_URL: "amqp://root:root@rmq-server:5672/taiga"
+      #RABBITMQ_USER: root
+      #RABBITMQ_PASS: root
+      TAIGA_SECRET_KEY: <TAIGA_SECRET_KEY>
+      TZ: "<TZ>"
+    volumes:
+      # tzdata
+      - /usr/share/zoneinfo/<TZ>:/usr/share/zoneinfo/<TZ>:ro
+    <<: *common
+
+  taiga-protected:
+    image: taigaio/taiga-protected:latest
+    container_name: taiga-protected
+    hostname: taiga-protected
+    environment:
+      MAX_AGE: 360
+      SECRET_KEY: <TAIGA_SECRET_KEY>
+      TZ: "<TZ>"
+    volumes:
+      # tzdata
+      - /usr/share/zoneinfo/<TZ>:/usr/share/zoneinfo/<TZ>:ro
+    <<: *common
+
+  taiga-gateway:
+    image: nginx:1.19-alpine
+    container_name: taiga-gateway
+    hostname: taiga-gateway
+    environment:
+      # for nginx-proxy
+      - VIRTUAL_HOST=taiga.<DOMAIN>
+      - VIRTUAL_PORT=80
+      #SSL#- SSL_POLICY=Mozilla-Modern
+      #NO_HSTS#- HSTS=off
+      #SELF_SIGN#- SSL_POLICY=self-sign
+
+      - TZ=<TZ>
+    expose:
+      - '80'
+    volumes:
+      # Based on: https://github.com/taigaio/taiga-docker/blob/master/taiga-gateway/taiga.conf
+      - ./mount/taiga-gateway/taiga.conf:/etc/nginx/conf.d/default.conf
+      - taiga-static-data:/taiga/static
+      - taiga-media-data:/taiga/media
+      # tzdata
+      - /usr/share/zoneinfo/<TZ>:/usr/share/zoneinfo/<TZ>:ro
+    depends_on:
+      - taiga-front
+      - taiga-back
+      - taiga-events
+    <<: *common
+
+volumes:
+  taiga-static-data:
+    external: true
+  taiga-media-data:
+    external: true
+
+networks:
+  default:
+    external:
+      name: bridge
+  container-link:
+    name: docker.internal

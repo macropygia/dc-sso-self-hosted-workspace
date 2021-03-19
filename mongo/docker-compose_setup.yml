@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+
+  # MongoDB
+  # https://hub.docker.com/_/mongo
+  mongoinit:
+    image: mongo:4-bionic
+    container_name: mongoinit
+    hostname: mongo-server
+    environment:
+      - TZ=<TZ>
+    volumes:
+      - mongo-data:/data/db
+      - mongo-config:/data/configdb
+      - ./mount/init:/docker-entrypoint-initdb.d
+    networks:
+      - container-link
+
+volumes:
+  mongo-data:
+    external: true
+  mongo-config:
+    external: true
+
+networks:
+  default:
+    external:
+      name: bridge
+  container-link:
+    name: docker.internal
