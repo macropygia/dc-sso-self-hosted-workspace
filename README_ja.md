@@ -7,7 +7,8 @@ docker-compose製Web開発用SSOオンプレブラウザアプリ統合環境
 ![scope](https://user-images.githubusercontent.com/3162324/111616182-f37a2280-8824-11eb-9aaa-9f89e0b3c001.png)
 
 - RHEL8互換環境向け
-- インストール方法は [docs/INSTALL_ja.md](docs/INSTALL_ja.md) と各ディレクトリの `INSALL_ja.md` を参照のこと
+- インストール方法は [docs/INSTALL_ja.md](docs/INSTALL_ja.md) と各ディレクトリの `INSTALL_ja.md` を参照のこと
+- [Qiita記事](https://qiita.com/macropygia/items/dc6e716e786ad098803a)にも情報あり
 
 ## 対応イメージ
 

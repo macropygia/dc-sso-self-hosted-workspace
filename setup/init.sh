@@ -14,8 +14,8 @@ fi
 function replaceStr() {
   find .. -type d -name ".git" -prune -o -type f \
     -regex ".*\.\(yml\|sh\|ini\|json\|js\|xml\|php\|rb\|py\)" \
-    -not -name ${BN} -print | xargs sed -i "s/$1/$2/g"
-  find ../proxy/mount/vhost.d -type f -print | xargs sed -i "s/$1/$2/g"
+    -not -name ${BN} -print | xargs sed -i "s%$1%$2%g"
+  find ../proxy/mount/vhost.d -type f -print | xargs sed -i "s%$1%$2%g"
 }
 
 function generateHash() {
