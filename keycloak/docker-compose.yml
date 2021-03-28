@@ -32,7 +32,7 @@ services:
       - VIRTUAL_PORT=8080
       #SSL#- SSL_POLICY=Mozilla-Modern
       #NO_HSTS#- HSTS=off
-      #SELF_SIGN#- SSL_POLICY=self-sign
+      #SELF_SIGN#- CERT_NAME=self-sign
 
       - TZ=<TZ>
     expose:
