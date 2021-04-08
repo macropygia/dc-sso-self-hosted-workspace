@@ -1,0 +1,9 @@
+{
+  "mappers": [
+    {
+      "name": "UUID to INT48",
+      "fileName": "uuid-to-int48-mapper.js",
+      "description": "Convert Keycloak User ID (UUID v4) to 48-bit integer (16 digits) for Mattermost"
+    }
+  ]
+}

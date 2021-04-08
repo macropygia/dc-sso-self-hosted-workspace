@@ -87,15 +87,14 @@
         {
             "name": "id",
             "protocol": "openid-connect",
-            "protocolMapper": "oidc-usermodel-attribute-mapper",
+            "protocolMapper": "script-uuid-to-int48-mapper.js",
             "consentRequired": false,
             "config": {
-                "userinfo.token.claim": "true",
-                "user.attribute": "longId",
                 "id.token.claim": "false",
                 "access.token.claim": "false",
                 "claim.name": "id",
-                "jsonType.label": "long"
+                "jsonType.label": "long",
+                "userinfo.token.claim": "true"
             }
         }
     ],

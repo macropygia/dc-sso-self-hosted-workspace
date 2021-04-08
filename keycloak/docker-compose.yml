@@ -40,6 +40,10 @@ services:
     volumes:
       # Custom theme
       #- /path/to/theme_name:/opt/jboss/keycloak/themes/theme_name:ro
+      # Activate OIDC JavaScript Provider
+      - ./mount/profile.properties:/opt/jboss/keycloak/standalone/configuration/profile.properties:ro
+      # Add Script Mapper (UUID to INT48)
+      - ./mount/uuid-to-int48-mapper.jar:/opt/jboss/keycloak/standalone/deployments/uuid-to-int48-mapper.jar:ro
       # tzdata
       - /usr/share/zoneinfo/<TZ>:/usr/share/zoneinfo/<TZ>:ro
     restart: always
