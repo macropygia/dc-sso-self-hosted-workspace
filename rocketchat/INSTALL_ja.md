@@ -8,7 +8,7 @@
 
 ### Keycloak管理画面
 
-1. 左メニューから「クライアント」→「作成」→「ファイルを選択」から `keycloak/client_settings/app-rocketchat-saml.json` をインポートし「保存」
+1. 左メニューから「クライアント」→「作成」→「ファイルを選択」から `keycloak/client_settings/app-rocketchat.json` をインポートし「保存」
 2. 「SAML鍵」タブを開き「新しい鍵を生成」
 
 ### rocket.chat管理画面

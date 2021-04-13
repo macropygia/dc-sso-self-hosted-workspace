@@ -39,6 +39,17 @@ SAMLログイン有効化後にID/Passでログインしたい場合は `/login?
 
 ## SSO設定
 
-https://qiita.com/ogawa_pro/items/ec25ecf90f2b0fdeff37
+参照元: https://qiita.com/ogawa_pro/items/ec25ecf90f2b0fdeff37
+
+### Keycloak管理画面(1)
+
+1. 左メニューから「レルムの設定」→「鍵」を開く
+2. RSA256の「証明書」ボタンを押して出てくる文字列をメモしておく(※1)
+
+### NextCloud管理画面
+
+(TBA)
+
+### Keycloak管理画面(2)
 
 (TBA)

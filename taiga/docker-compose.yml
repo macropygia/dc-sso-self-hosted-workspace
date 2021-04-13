@@ -99,8 +99,9 @@ services:
     container_name: taiga-front
     hostname: taiga-front
     environment:
-      TAIGA_URL: "http://taiga.<DOMAIN>"
-      TAIGA_WEBSOCKETS_URL: "ws://taiga.<DOMAIN>"
+      TAIGA_URL: "<PROTOCOL>://taiga.<DOMAIN>"
+      #NOSSL#TAIGA_WEBSOCKETS_URL: "ws://taiga.<DOMAIN>"
+      #SSL#TAIGA_WEBSOCKETS_URL: "wss://taiga.<DOMAIN>"
 
       TZ: "<TZ>"
     volumes:

@@ -8,7 +8,7 @@
 
 ### Keycloak管理画面
 
-1. 左メニューから「クライアント」→「作成」→「ファイルを選択」から `keycloak/client_settings/app-gitea-oicd.json` をインポートし「保存」
+1. 左メニューから「クライアント」→「作成」→「ファイルを選択」から `keycloak/client_settings/app-gitea.json` をインポートし「保存」
 2. 「クレデンシャル」タブを開き「シークレット」の内容をメモする (※1)
 
 ### Gitea管理画面

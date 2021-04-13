@@ -29,7 +29,7 @@ docker-composeで動作するRabbitMQには初回起動時に自動で初期化�
 
 ### Keycloak管理画面
 
-1. 左メニューから「クライアント」→「作成」→「ファイルを選択」から `keycloak/client_settings/app-taiga-oidc.json` をインポートし「保存」
+1. 左メニューから「クライアント」→「作成」→「ファイルを選択」から `keycloak/client_settings/app-taiga.json` をインポートし「保存」
 2. 「クレデンシャル」タブを開き「シークレット」の内容をメモする (※1)
 3. 表示名を変更したい場合は `トークンクレーム名` が `name` のマッパー設定を変更する
 

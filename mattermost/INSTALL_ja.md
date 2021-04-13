@@ -8,7 +8,7 @@
 
 ### Keycloak管理画面
 
-1. 左メニューから「クライアント」→「作成」→「ファイルを選択」から `keycloak/client_settings/app-mattermost-oicd.json` をインポートし「保存」
+1. 左メニューから「クライアント」→「作成」→「ファイルを選択」から `keycloak/client_settings/app-mattermost.json` をインポートし「保存」
 2. 「クレデンシャル」タブを開き「シークレット」の内容をメモする (※1)
 3. 表示名を変更したい場合は `トークンクレーム名` が `name` のマッパー設定を変更する
 
@@ -31,4 +31,19 @@
 
 ```yaml
 - MM_GITLABSETTINGS_SECRET=abc12345-defg-6789-hijk-lmn0pqrstuvw
+```
+
+## bleve関連
+
+インデックス用ボリュームにMattermostの実行ユーザーがアクセスできるように、所有者をコンテナ内の実行ユーザーのUID/GIDに設定する。
+ユーザー名とグループ名はいずれも `mattermost` 、UID/GIDはいずれも `2000` となっている。
+
+```bash
+chown 2000:2000 /var/lib/docker/volumes/mattermost-indexes/_data
+
+make mm up
+
+# 確認
+docker exec -it mattermost /bin/ash
+ls -l /mattermost
 ```

@@ -8,7 +8,7 @@
 
 ### Keycloak管理画面
 
-1. 左メニューから「クライアント」→「作成」→「ファイルを選択」から `keycloak/client_settings/app-wikijs-saml.json` をインポートし「保存」
+1. 左メニューから「クライアント」→「作成」→「ファイルを選択」から `keycloak/client_settings/app-wikijs.json` をインポートし「保存」
 2. 「SAML鍵」タブを開き「新しい鍵を生成」
 3. 「設定」タブを開く
 4. 「有効なリダイレクトURI」と「SAMLを処理するマスターURL」の内容に含まれる `WIKIJS_REDIRECT_URL_HASH` を、Wiki.jsの設定画面の一番下に表示されている「JSCallback URL / Redirect URL」の対応部分の文字列で置き換える
