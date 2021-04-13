@@ -1,0 +1,63 @@
+version: '3.8'
+
+# https://hub.docker.com/r/freinet/postfix-relay
+# https://github.com/fw8/docker-postfix
+
+services:
+  smtp:
+    image: freinet/postfix-relay:latest
+    container_name: smtp
+    hostname: smtp-server
+    environment:
+      - MAILNAME=<DOMAIN>
+      #- MYNETWORKS=
+      #- LOGOUTPUT=
+      - TZ=Asia/Toyo
+
+      #- SIZELIMIT=
+      #- POSTFIX_ADD_MISSING_HEADERS=
+      - INET_PROTOCOLS=ipv4
+      #- BOUNCE_ADDRESS=
+      #- HEADER_CHECKS=
+
+      #- RELAYHOST=
+      #- RELAYHOST_AUTH=
+      #- RELAYHOST_PASSWORDMAP=
+      #- VIRTUAL_ALIASMAP=
+
+      - USE_TLS=no
+      #- TLS_SECURITY_LEVEL=
+      #- TLS_KEY=/etc/letsencrypt/live/<DOMAIN>/privkey.pem
+      #- TLS_CRT=/etc/letsencrypt/live/<DOMAIN>/fullchain.pem
+      #- TLS_CA=
+
+      - USE_DKIM=yes
+      - /opt/mail.private
+      #- DKIM_DOMAINS=
+      - DKIM_SELECTOR=mail
+      #- DKIM_INTERNALHOSTS=
+      #- DKIM_EXTERNALIGNORE=
+      #- DKIM_OVERSIGN_HEADERS=
+      #- DKIM_SENDER_HEADERS=
+      #- DKIM_SIGN_HEADERS=
+      #- DKIM_OMIT_HEADERS=
+    expose:
+      - '587'
+    volumes:
+      - ./mount/mail.private:/opt/mail.private
+      #- /etc/letsencrypt:/etc/letsencrypt
+      #- /var/spool/postfix:/var/spool/postfix
+    restart: always
+    networks:
+      - container-link
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  default:
+    external:
+      name: bridge
+  container-link:
+    name: docker.internal

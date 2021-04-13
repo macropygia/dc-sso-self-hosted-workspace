@@ -39,6 +39,7 @@ docker-compose製Web開発用SSOオンプレブラウザアプリ統合環境
 | [ElasticHQ](https://www.elastichq.org/)                               | Elasticsearch WebUI        |
 | [nginx-proxy](https://github.com/nginx-proxy/nginx-proxy)             | リバースプロキシ           |
 | [MailCatcher](https://mailcatcher.me/)                                | ダミーSMTPサーバ           |
+| [docker-postfix](https://github.com/panubo/docker-postfix)            | DKIM対応SMTPリレー         |
 | [Scope](https://www.weave.works/oss/scope/)                           | コンテナモニタリング       |
 | [Portainer](https://www.portainer.io/)                                | コンテナモニタリング・管理 |
 

@@ -38,6 +38,7 @@ Self-hosted SSO browser application suite based on Docker Compose suitable for w
 | [ElasticHQ](https://www.elastichq.org/)                               | Elasticsearch WebUI  |
 | [nginx-proxy](https://github.com/nginx-proxy/nginx-proxy)             | Reverse Proxy        |
 | [MailCatcher](https://mailcatcher.me/)                                | Dummy SMTP Server    |
+| [docker-postfix](https://github.com/panubo/docker-postfix)            | SMTP Relay           |
 | [Scope](https://www.weave.works/oss/scope/)                           | Container Monitoring |
 | [Portainer](https://www.portainer.io/)                                | Container Management |
 
