@@ -1,11 +1,11 @@
 version: '3.8'
 
-# https://hub.docker.com/r/freinet/postfix-relay
-# https://github.com/fw8/docker-postfix
+# https://github.com/panubo/docker-postfix
+# https://hub.docker.com/r/panubo/postfix/
 
 services:
   smtp:
-    image: freinet/postfix-relay:latest
+    image: panubo/postfix:latest
     container_name: smtp
     hostname: smtp-server
     environment:
