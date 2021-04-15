@@ -38,3 +38,7 @@
 2. 「SAML を有効にする」チェックボックスをONにする
 3. 「Basic Settings」と「Attribute Mapping」の内容がdocker-compose.ymlから読み込まれていることを確認する
 4. 最下部の「更新」ボタンを押す
+
+## PlantUMLを公開したい場合
+
+draw.ioのenvironmentをコピーしてサブドメインを変更する。

@@ -1,5 +1,13 @@
 version: '3.8'
 
+x-op-common: &common
+  restart: unless-stopped
+  networks:
+    - container-link
+  logging:
+    options:
+      max-size: "10m"
+      max-file: "3"
 
 services:
 
@@ -26,9 +34,9 @@ services:
       #- NCHAN_URI=
       #- HACKMD_URI=https://codimd.<DOMAIN>
       #- HACKMD_URI_FOR_SERVER=https://codimd-server:3000
-      #- PLANTUML_URL=
+      - PLANTUML_URL=http://plantuml-server:8080
       #- BLOCKDIAG_URI=
-      #- DRAWIO_URI=
+      - DRAWIO_URI=<PROTOCOL>://draw.<DOMAIN>
       - APP_SITE_URL=<PROTOCOL>://growi.<DOMAIN>
       - LOCAL_STRATEGY_ENABLED=true
       - SAML_ENABLED=true
@@ -58,15 +66,36 @@ services:
       - growi-data:/data
       # tzdata
       - /usr/share/zoneinfo/<TZ>:/usr/share/zoneinfo/<TZ>:ro
-    restart: unless-stopped
-    networks:
-      - container-link
-    logging:
-      options:
-        max-size: "10m"
-        max-file: "3"
+    <<: *common
     extra_hosts:
       - auth.<DOMAIN>:<LOCAL_IP>
+
+  # PlantUML
+  # https://hub.docker.com/r/plantuml/plantuml-server
+  plantuml:
+    image: plantuml/plantuml-server:latest
+    container_name: plantuml
+    hostname: plantuml-server
+    expose:
+      - '8080'
+    <<: *common
+
+  # draw.io
+  # https://hub.docker.com/r/jgraph/drawio
+  drawio:
+    image: jgraph/drawio:latest
+    container_name: drawio
+    hostname: drawio-server
+    environment:
+      # for nginx-proxy
+      - VIRTUAL_HOST=draw.<DOMAIN>
+      - VIRTUAL_PORT=8080
+      #SSL#- SSL_POLICY=Mozilla-Modern
+      #NO_HSTS#- HSTS=off
+      #SELF_SIGN#- CERT_NAME=self-sign
+    expose:
+      - '8080'
+    <<: *common
 
 volumes:
   growi-data:
