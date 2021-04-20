@@ -116,6 +116,16 @@ if "${SSL}" && "${SELF}" ; then
 fi
 
 
+# Mount Japanese Fonts
+if "${FONT}" ; then
+  # Remove #FONT#
+  replaceStr "#FONT#" ""
+
+  echo "\"#FONT#\" has been removed."
+  echo "You must place the fonts manuarlly."
+fi
+
+
 # SMTP Server
 replaceStr "<SMTP_SERVER>" "${SMTP_SERVER}"
 replaceStr "<SMTP_PORT>" "${SMTP_PORT}"

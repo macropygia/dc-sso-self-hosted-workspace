@@ -62,6 +62,8 @@ services:
       # Load GROWI Agent
       #- ./mount/head.ejs:/home/hackmd/app/public/views/codimd/head.ejs:ro
       #- ./mount/foot.ejs:/home/hackmd/app/public/views/codimd/foot.ejs:ro
+      # font
+      #font#- /usr/share/fonts/japanese/TrueType:/usr/share/fonts/japanese/TrueType:ro
       # tzdata
       - /usr/share/zoneinfo/<TZ>:/usr/share/zoneinfo/<TZ>:ro
     restart: unless-stopped

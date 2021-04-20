@@ -85,6 +85,10 @@ $ chmod +x /usr/local/bin/docker-compose
 - SELF
     - 自己署名認証局を使用するかどうか（ `true` or `false` ）
     - `SSL=true` の場合のみ有効
+- FONT
+    - サーバの `/usr/share/fonts/japanese/TrueType` をコンテナにマウントするかどうか（ `true` or `false` ）
+    - [IPAフォント](https://moji.or.jp/ipafont/)やNoto Sans JPなどを自分で配置しておく必要がある
+    - 現時点ではCodiMDのみ使用
 - SMTP_SERVER
     - SMTPサーバのホスト名（同梱のMailCatcherの場合: `smtp-dummy`）
 - SMTP_PORT
