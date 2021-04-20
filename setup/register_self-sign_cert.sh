@@ -15,4 +15,4 @@ cp -f /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem self-sign-cert/ca-certif
 cp -f /etc/pki/ca-trust/extracted/java/cacerts self-sign-cert/cacerts
 
 # If you want to restore the state of the host machine
-# please run "unregisterselfsigncert.sh"
+# please run "unregister_self-sign_cert.sh"

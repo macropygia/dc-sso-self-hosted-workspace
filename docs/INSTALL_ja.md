@@ -105,38 +105,38 @@ $ ./setup/init.sh
 
 ### 3. Docker Volumeの作成
 
-`setup/createvolumes.sh` を実行する。
+`setup/create_volumes.sh` を実行する。
 
 ```bash
-$ ./setup/createvolumes.sh
+$ ./setup/create_volumes.sh
 ```
 
 ### 4. 自己署名認証局・サーバ証明書関連作業（使用する場合のみ）
 
 #### 証明書の作成
 
-ローカルネットワークでテストする場合は `setup/createselfsigncert.sh` をそのまま実行する。
-外向きに公開する場合は `setup/createselfsigncert.sh` の `IP=0.0.0.0` の部分をサーバのグローバルIPに書き換えてから実行する。
+ローカルネットワークでテストする場合は `setup/create_self-sign_cert.sh` をそのまま実行する。
+外向きに公開する場合は `setup/create_self-sign_cert.sh` の `IP=0.0.0.0` の部分をサーバのグローバルIPに書き換えてから実行する。
 
 - Dockerイメージ [self-sign-cert](https://github.com/t-kuni/self-sign-cert) を使用する（[dockerhub](https://hub.docker.com/r/tkuni83/self-sign-cert), [作者によるQiita記事](https://qiita.com/t-kuni/items/d3d72f429273cf0ee31e)）
 
 ```bash
 $ cd /root/docker/shw/setup
-$ ./createselfsigncert.sh
+$ ./create_self-sign_cert.sh
 ```
 
 `self-sign-cert` ディレクトリの中に鍵と証明書が生成され、 `server.key` と `server.crt` が `proxy/mount/certs` にコピーされる。（既存のファイルは上書きされる）
 
 #### ホストへの自己署名認証局の登録とCAバンドルのコピー
 
-`setup/registerselfsigncert.sh` を実行する。このスクリプトの実行内容は以下の通り。
+`setup/register_self-sign_cert.sh` を実行する。このスクリプトの実行内容は以下の通り。
 
 - 前項で作成した自己署名認証局の証明書をホストマシンの登録用ディレクトリにコピー
 - ホストマシンに登録
 - 自己署名の認証局が追加されたホストマシンのCAバンドル（PEMとJava用キーストア）をSHWのディレクトリにコピー
     - これらのファイルは各コンテナにマウントして使用される
 
-ホストマシンから登録を解除したい場合は `setup/unregisterselfsigncert.sh` を実行する
+ホストマシンから登録を解除したい場合は `setup/unregister_self-sign_cert.sh` を実行する
 
 ### 5. ファイアーウォールの設定
 

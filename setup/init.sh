@@ -112,7 +112,7 @@ if "${SSL}" && "${SELF}" ; then
   replaceStr "#SELF_SIGN#" ""
 
   echo "\"#SELF_SIGN#\" has been removed."
-  echo "You should run \"createselfsigncert.sh\" and \"registerselfsigncert.sh\"."
+  echo "You should run \"create_self-sign_cert.sh\" and \"register_self-sign_cert.sh\"."
 fi
 
 
