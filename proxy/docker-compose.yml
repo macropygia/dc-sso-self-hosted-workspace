@@ -23,6 +23,7 @@ services:
       - '80:80'
       - '443:443'
     volumes:
+      - ./mount/conf.d/00_common.conf:/etc/nginx/conf.d/00_common.conf
       - ./mount/vhost.d:/etc/nginx/vhost.d
       - ./mount/htpasswd:/etc/nginx/htpasswd
       - ./mount/certs:/etc/nginx/certs

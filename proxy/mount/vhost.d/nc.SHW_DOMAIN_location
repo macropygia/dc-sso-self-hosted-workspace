@@ -1,0 +1,3 @@
+client_max_body_size 1g;
+client_body_in_file_only clean;
+proxy_request_buffering off;
