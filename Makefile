@@ -1,24 +1,25 @@
 PROJECTS := $(foreach path,$(shell ls ./*/docker-compose.yml),$(patsubst ./%/,%,$(dir $(path))))
-ALIASES := $(foreach alias,$(shell ls ./*/ALIAS),$(patsubst ./%/,%,$(dir $(alias))))
+ALIASES := $(foreach alias,$(shell ls ./*/ALIAS 2>/dev/null),$(patsubst ./%/,%,$(dir $(alias))))
 LATEST := $(strip $(shell cat .dc_latest 2>/dev/null))
 $(shell echo -n "" > .dc_latest)
 TARGETS = $(strip $(shell cat .dc_latest))
 NOW = $(shell date --rfc-2822)
+op := 
 
 .PHONY: $(PROJECTS)
-.PHONY: up build pull down start stop restart pause unpause ps top do ls
+.PHONY: up build pull down start stop restart pause unpause ps logs top do ls
 .PHONY: info active clean
 
 # Command
 
 define exec
-	@-docker-compose -f ./$1/docker-compose.yml $2
-	@echo -e "$(NOW)\tdocker-compose -f ./$1/docker-compose.yml $2" >> .dc_history
+	@-docker-compose -f ./$1/docker-compose.yml $2 $(op)
+	@echo -e "$(NOW)\tdocker-compose -f ./$1/docker-compose.yml $2 $(op)" >> .dc_history
 
 endef
 
 define exec_nolog
-	@-docker-compose -f ./$1/docker-compose.yml $2
+	@-docker-compose -f ./$1/docker-compose.yml $2 $(op)
 
 endef
 
@@ -50,6 +51,9 @@ unpause:
 	$(foreach t,$(TARGETS),$(call exec,$(t),$@))
 
 ps:
+	$(foreach t,$(TARGETS),$(call exec_nolog,$(t),$@))
+
+logs:
 	$(foreach t,$(TARGETS),$(call exec_nolog,$(t),$@))
 
 top:
